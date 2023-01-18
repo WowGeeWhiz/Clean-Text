@@ -1,0 +1,17 @@
+C:\GitHub\Clean-Text\Clean Text\Clean Text\bin\Release\net6.0-windows\Clean Text.exe
+C:\GitHub\Clean-Text\Clean Text\Clean Text\bin\Release\net6.0-windows\Clean Text.deps.json
+C:\GitHub\Clean-Text\Clean Text\Clean Text\bin\Release\net6.0-windows\Clean Text.runtimeconfig.json
+C:\GitHub\Clean-Text\Clean Text\Clean Text\bin\Release\net6.0-windows\Clean Text.dll
+C:\GitHub\Clean-Text\Clean Text\Clean Text\bin\Release\net6.0-windows\Clean Text.pdb
+C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\Clean Text.csproj.AssemblyReference.cache
+C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\Clean_Text.Form1.resources
+C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\Clean Text.csproj.GenerateResource.cache
+C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\Clean Text.GeneratedMSBuildEditorConfig.editorconfig
+C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\Clean Text.AssemblyInfoInputs.cache
+C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\Clean Text.AssemblyInfo.cs
+C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\Clean Text.csproj.CoreCompileInputs.cache
+C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\Clean Text.dll
+C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\refint\Clean Text.dll
+C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\Clean Text.pdb
+C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\Clean Text.genruntimeconfig.cache
+C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\ref\Clean Text.dll
