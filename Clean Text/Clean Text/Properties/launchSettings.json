@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Clean Text": {
+      "commandName": "Project",
+      "hotReloadEnabled": false
+    }
+  }
+}

@@ -20,6 +20,7 @@ namespace Clean_Text
 
             //empty and disable replace text box
             replaceTextBox.Enabled = false; 
+            replaceFromLoadButton.Enabled = false;
             replaceTextBox.Text = "";
 
             replaceTextButton.Checked = false; //uncheck replace text button
@@ -113,12 +114,25 @@ namespace Clean_Text
             Application.Exit();
         }
 
+        private void inputFromLoadButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
         //replace text button is checked/unchecked
         private void replaceTextButton_CheckedChanged(object sender, EventArgs e)
         {
             if (loading) return; //if loading, break
-            if (replaceTextButton.Checked) replaceTextBox.Enabled = true; //enable text box if checked
-            else replaceTextBox.Enabled = false; //disable text box if checked
+            if (replaceTextButton.Checked)
+            {
+                replaceTextBox.Enabled = true; //enable text box if checked
+                replaceFromLoadButton.Enabled = true; //enable button to load replace value from a text file
+            }
+            else
+            {
+                replaceTextBox.Enabled = false; //disable text box if not checked
+                replaceFromLoadButton.Enabled = false; //disable button to load if not checked
+            }
             CheckValid(); //check for readiness to run
         }
 
