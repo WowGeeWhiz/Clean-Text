@@ -7,6 +7,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>Text Cleaner.ico</ApplicationIcon>
+	<FileVersion>1.1</FileVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Text Cleaner.ico" />
+  </ItemGroup>
 
 </Project>

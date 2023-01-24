@@ -1,0 +1,8 @@
+**/Deprecated
+**/bin
+**/Bin
+**/Debug
+**/debug
+**/PublishProfiles
+*.log
+**/.vs
