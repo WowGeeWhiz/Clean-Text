@@ -4,6 +4,7 @@ namespace Clean_Text
     {
         //booleans for use throughout program
         bool loading, validEntry, validRemove, validReplace;
+        string tempLoadedValue = "";
 
         public Form1()
         {
@@ -19,7 +20,7 @@ namespace Clean_Text
             validEntry = validRemove = validReplace = false; //mark entries invalid
 
             //empty and disable replace text box
-            replaceTextBox.Enabled = false; 
+            replaceTextBox.Enabled = false;
             replaceFromLoadButton.Enabled = false;
             replaceTextBox.Text = "";
 
@@ -114,9 +115,18 @@ namespace Clean_Text
             Application.Exit();
         }
 
+        //when load input text button clicked
         private void inputFromLoadButton_Click(object sender, EventArgs e)
         {
+            Form getFile = new Form2(); //call form 2
+            getFile.ShowDialog(); //show form 2 and pause until it is closed
 
+            if (Program.tempString == "" || Program.tempString == null) return; //if return is empty, break
+            else
+            {
+                entryTextBox.Text = Program.tempString; //otherwise update text
+                Program.tempString = ""; //reset reference
+            }
         }
 
         //replace text button is checked/unchecked

@@ -1,7 +1,10 @@
 namespace Clean_Text
 {
-    internal static class Program
+    public  static class Program
     {
+        public static string tempString = ""; //static temp reference string
+
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>

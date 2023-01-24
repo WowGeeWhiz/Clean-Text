@@ -15,3 +15,5 @@ C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\refint\Cle
 C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\Clean Text.pdb
 C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\Clean Text.genruntimeconfig.cache
 C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\ref\Clean Text.dll
+C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\Clean_Text.Form2.resources
+C:\GitHub\Clean-Text\Clean Text\Clean Text\obj\Release\net6.0-windows\Clean_Text.Form3.resources
