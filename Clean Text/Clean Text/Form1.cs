@@ -129,6 +129,32 @@ namespace Clean_Text
             }
         }
 
+        private void removeFromLoadButton_Click(object sender, EventArgs e)
+        {
+            Form getFile = new Form2(); //call form 2
+            getFile.ShowDialog(); //show form 2 and pause until it is closed
+
+            if (Program.tempString == "" || Program.tempString == null) return; //if return is empty, break
+            else
+            {
+                removeTextBox.Text = Program.tempString; //otherwise update text
+                Program.tempString = ""; //reset reference
+            }
+        }
+
+        private void replaceFromLoadButton_Click(object sender, EventArgs e)
+        {
+            Form getFile = new Form2(); //call form 2
+            getFile.ShowDialog(); //show form 2 and pause until it is closed
+
+            if (Program.tempString == "" || Program.tempString == null) return; //if return is empty, break
+            else
+            {
+                replaceTextBox.Text = Program.tempString; //otherwise update text
+                Program.tempString = ""; //reset reference
+            }
+        }
+
         //replace text button is checked/unchecked
         private void replaceTextButton_CheckedChanged(object sender, EventArgs e)
         {
