@@ -9,46 +9,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using static Clean_Text.Program;
 
 namespace Clean_Text
 {
     public partial class Form3 : Form
     {
 
-        string prefDir = @Application.StartupPath + "config.ini";//.StartupPath;
-        string currentUser = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-        string[,] defaultConfig = new string[,]
-        {
-            {"outputDirectory=", ""},
-            {"outputOriginal=","0"},
-            {"outputRemoved=","0"},
-            {"outputReplace=","0"},
-            {"outputCleaned=","1"},
-            {"generateLog=","0"},
-            {"outputSeparate=","0"},
-            {"outputTxt=","0" }
-        };
-        string[,] currentConfig;
-
         bool isLoading = false;
+        string[] tempArray = new string[Preferences.prefs.GetLength(0)];
 
         public Form3()
         {
             InitializeComponent();
-            currentUser = currentUser.Substring(currentUser.IndexOf('\\') + 1); //must be before any calls to currentUser, this removes the machine name
-            defaultConfig[0, 1] = @"C:\Users\" + @currentUser + @"\Downloads\CleanTextOutputFiles";
-            currentConfig = defaultConfig;
             ReloadSavedValues();
-        }
-
-        private string[] DoubleArrayToSingle(string[,] input)
-        {
-            List<string> temp = new List<string>();
-            for (int i = 0; i < input.GetLength(0); i++)
-            {
-                temp.Add(input[i, 0] + input[i, 1]);
-            }
-            return temp.ToArray();
         }
 
         private bool StringToBool(string input)
@@ -71,62 +45,40 @@ namespace Clean_Text
             else outputCleanedCheckBox.Enabled = true;
         }
 
-        private void WriteToFile(string dir, string[] lines)
-        {
-            File.WriteAllLines(dir, lines);
-            return;
-        }
-
         private void ReloadSavedValues()
         {
+            this.Cursor = Cursors.WaitCursor;
             isLoading = true;
 
-            try
+            Preferences.LoadPrefs();
+
+            string[,] settings = Preferences.currentConfig;
+
+            outputDirectoryTextBox.Text = "";
+            outputDirectoryTextBox.PlaceholderText = settings[0, 1];
+            outputOriginalCheckBox.Checked = StringToBool(settings[1, 1]);
+            outputRemovedCheckBox.Checked = StringToBool(settings[2, 1]);
+            outputReplaceCheckBox.Checked = StringToBool(settings[3, 1]);
+            outputCleanedCheckBox.Checked = StringToBool(settings[4, 1]);
+            generateEventLogCheckBox.Checked = StringToBool(settings[5, 1]);
+            outputSeparateCheckBox.Checked = StringToBool(settings[6, 1]);
+            outputAsTxtCheckBox.Checked = StringToBool(settings[7, 1]);
+
+            for (int i = 0; i < settings.GetLength(0); i++)
             {
-                if (!File.Exists(prefDir))
-                {
-                    MessageBox.Show("No config file found, generating file...");
-                    WriteToFile(prefDir, DoubleArrayToSingle(defaultConfig));
-                }
-
-                string[] loadedConfigs = File.ReadAllLines(prefDir);
-                if (loadedConfigs.Length != defaultConfig.GetLength(0))
-                {
-                    MessageBox.Show("Config file missing keys, restoring default settings...");
-                    loadedConfigs = DoubleArrayToSingle(defaultConfig);
-                    WriteToFile(prefDir, loadedConfigs);
-                }
-
-                for (int a = 0; a < loadedConfigs.Length; a++)
-                {
-                    string[] tempArray = loadedConfigs[a].Split('=');
-                    currentConfig[a, 1] = tempArray[1];
-                }
-
-                outputDirectoryTextBox.Text = "";
-                outputDirectoryTextBox.PlaceholderText = currentConfig[0, 1];
-                outputOriginalCheckBox.Checked = StringToBool(currentConfig[1, 1]);
-                outputRemovedCheckBox.Checked = StringToBool(currentConfig[2, 1]);
-                outputReplaceCheckBox.Checked = StringToBool(currentConfig[3, 1]);
-                outputCleanedCheckBox.Checked = StringToBool(currentConfig[4, 1]);
-                generateEventLogCheckBox.Checked = StringToBool(currentConfig[5, 1]);
-                outputSeparateCheckBox.Checked = StringToBool(currentConfig[6, 1]);
-                outputAsTxtCheckBox.Checked = StringToBool(currentConfig[7, 1]);
-
-
-                SetEnabledStates();
+                tempArray[i] = settings[i, 1];
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-            }
+
+
+            SetEnabledStates();
 
             isLoading = false;
+            this.Cursor = Cursors.Default;
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void revertButton_Click(object sender, EventArgs e)
@@ -137,79 +89,96 @@ namespace Clean_Text
         private void outputOriginalCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (isLoading) return;
+            if (outputOriginalCheckBox.Checked) tempArray[1] = "1";
+            else tempArray[1] = "0";
             SetEnabledStates();
         }
 
         private void outputRemovedCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (isLoading) return;
+            if (outputRemovedCheckBox.Checked) tempArray[2] = "1";
+            else tempArray[2] = "0";
             SetEnabledStates();
         }
 
         private void outputReplaceCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (isLoading) return;
+            if (outputReplaceCheckBox.Checked) tempArray[3] = "1";
+            else tempArray[3] = "0";
             SetEnabledStates();
         }
 
         private void outputCleanedCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (isLoading) return;
+            if (outputCleanedCheckBox.Checked) tempArray[4] = "1";
+            else tempArray[4] = "0";
             SetEnabledStates();
         }
 
         private void generateEventLogCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (isLoading) return;
-
+            if (generateEventLogCheckBox.Checked) tempArray[5] = "1";
+            else tempArray[5] = "0";
         }
 
         private void outputSeparateCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (isLoading) return;
-
+            if (outputSeparateCheckBox.Checked) tempArray[6] = "1";
+            else tempArray[6] = "0";
         }
 
         private void outputAsTxtCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (isLoading) return;
-
+            if (outputAsTxtCheckBox.Checked) tempArray[7] = "1";
+            else tempArray[7] = "1";
         }
 
         private void browseForOutputDirButton_Click(object sender, EventArgs e)
         {
             string tempDir = "";
-            try
-            {
-                FolderBrowserDialog browser = new FolderBrowserDialog();
-                browser.InitialDirectory = outputDirectoryTextBox.Text;
-                browser.Description = "Select output folder";
-                browser.UseDescriptionForTitle = true;
+
+            FolderBrowserDialog browser = new FolderBrowserDialog();
+            browser.InitialDirectory = outputDirectoryTextBox.Text;
+            browser.Description = "Select output folder";
+            browser.UseDescriptionForTitle = true;
 
 
-                if (browser.ShowDialog() == DialogResult.OK)
-                {
-                    tempDir = browser.SelectedPath;
-                    WriteToFile(tempDir + "\\test.txt", new string[] { "test file" });
+            if (browser.ShowDialog() == DialogResult.OK)
+            {
+                tempDir = browser.SelectedPath;
+            }
 
-                }
+            if (Preferences.AccessibleDirectory(tempDir)) outputDirectoryTextBox.Text = tempDir;
+        }
 
-            }
-            catch (UnauthorizedAccessException)
+        private void applyButton_Click(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.WaitCursor;
+
+            if (!Preferences.AccessibleDirectory(tempArray[0]))
             {
-                MessageBox.Show("The program cannot access that directory.\nTry running the program as an administrator, or changing the security of the directory");
-                tempDir = "";
+                this.Cursor = Cursors.Default;
+                return;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-                tempDir = "";
-            }
-            finally
-            {
-                if (File.Exists(tempDir + "\\test.txt")) File.Delete(tempDir + "\\test.txt");
-                if (tempDir != "") outputDirectoryTextBox.Text = tempDir;
-            }
+
+            Preferences.WritePrefs(tempArray);
+
+            this.Cursor = Cursors.Default;
+
+            MessageBox.Show("Preferences updated.");
+        }
+
+        private void outputDirectoryTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (isLoading) return;
+            if (outputDirectoryTextBox.Text == "" || outputDirectoryTextBox.Text == " ") tempArray[0] = Preferences.currentConfig[0, 1];
+            tempArray[0] = outputDirectoryTextBox.Text;
         }
     }
 }

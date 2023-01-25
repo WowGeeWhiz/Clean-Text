@@ -197,6 +197,7 @@
             this.outputDirectoryTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
             this.outputDirectoryTextBox.Size = new System.Drawing.Size(185, 23);
             this.outputDirectoryTextBox.TabIndex = 1;
+            this.outputDirectoryTextBox.TextChanged += new System.EventHandler(this.outputDirectoryTextBox_TextChanged);
             // 
             // applyButton
             // 
@@ -208,6 +209,7 @@
             this.applyButton.TabIndex = 0;
             this.applyButton.Text = "Apply";
             this.applyButton.UseVisualStyleBackColor = true;
+            this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
             // 
             // revertButton
             // 

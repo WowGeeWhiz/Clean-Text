@@ -2,8 +2,109 @@ namespace Clean_Text
 {
     public  static class Program
     {
-        public static string tempString = ""; //static temp reference string
+        public static class Preferences
+        {
+            public static string prefDir = @Application.StartupPath + "config.ini";//.StartupPath;
+            public static string currentUser = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            public static string[,] prefs = new string[,]
+            {
+                {"outputDirectory=", ""},
+                {"outputOriginal=","0"},
+                {"outputRemoved=","0"},
+                {"outputReplace=","0"},
+                {"outputCleaned=","1"},
+                {"generateLog=","0"},
+                {"outputSeparate=","0"},
+                {"outputTxt=","0" }
+            };
+            public static string[,] currentConfig = prefs;
 
+            public static void LoadPrefs()
+            {
+                try
+                {
+                    if (!File.Exists(prefDir))
+                    {
+                        MessageBox.Show("No config file found, generating file...");
+                        File.WriteAllLines(prefDir, DoubleArrayToSingle(prefs));
+                    }
+
+                    string[] loadedConfigs = File.ReadAllLines(prefDir);
+                    if (loadedConfigs.Length != prefs.GetLength(0))
+                    {
+                        MessageBox.Show("Config file missing keys, restoring default settings...");
+                        loadedConfigs = DoubleArrayToSingle(prefs);
+                        File.WriteAllLines(prefDir, loadedConfigs);
+                    }
+
+                    for (int a = 0; a < loadedConfigs.Length; a++)
+                    {
+                        string[] tempArray = loadedConfigs[a].Split('=');
+                        currentConfig[a, 1] = tempArray[1];
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+
+            public static void WritePrefs(string[] values)
+            {
+                string[] temp = new string[values.Length];
+
+                try
+                {
+                    for(int i = 0; i < values.Length; i++)
+                    {
+                        temp[i] = currentConfig[i, 0] + values[i];
+                        currentConfig[i, 1] = values[i];
+                    }
+
+                    File.WriteAllLines(prefDir, temp);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+
+            static private string[] DoubleArrayToSingle(string[,] input)
+            {
+                List<string> temp = new List<string>();
+                for (int i = 0; i < input.GetLength(0); i++)
+                {
+                    temp.Add(input[i, 0] + input[i, 1]);
+                }
+                return temp.ToArray();
+            }
+
+            static public bool AccessibleDirectory(string dir)
+            {
+                bool temp = true;
+                try
+                {
+                    File.WriteAllLines(dir + "\\test.txt", new string[] { "test file" });
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    MessageBox.Show("The program cannot access that directory.\nTry running the program as an administrator, or changing the security of the directory");
+                    temp = false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                    temp = false;
+                }
+                finally
+                {
+                    if (File.Exists(dir + "\\test.txt")) File.Delete(dir + "\\test.txt");
+                }
+                return temp;
+            }
+        }
+
+        public static string tempString = ""; //static temp reference string
 
         /// <summary>
         ///  The main entry point for the application.
@@ -14,6 +115,8 @@ namespace Clean_Text
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
+            Preferences.currentUser = Preferences.currentUser.Substring(Preferences.currentUser.IndexOf('\\') + 1); //must be before any calls to currentUser, this removes the machine name
+            Preferences.prefs[0, 1] = @"C:\Users\" + Preferences.currentUser + @"\Downloads\CleanTextOutputFiles";
             Application.Run(new Form1());
         }
     }
