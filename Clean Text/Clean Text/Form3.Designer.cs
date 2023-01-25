@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form3));
             this.settingsLabel = new System.Windows.Forms.Label();
             this.outputLogGroup = new System.Windows.Forms.GroupBox();
+            this.browseForOutputDirButton = new System.Windows.Forms.Button();
             this.outputAsTxtCheckBox = new System.Windows.Forms.CheckBox();
             this.generateEventLogCheckBox = new System.Windows.Forms.CheckBox();
             this.outputSeparateCheckBox = new System.Windows.Forms.CheckBox();
@@ -43,6 +44,7 @@
             this.applyButton = new System.Windows.Forms.Button();
             this.revertButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.outputLogGroup.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,6 +61,7 @@
             // 
             this.outputLogGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.outputLogGroup.Controls.Add(this.browseForOutputDirButton);
             this.outputLogGroup.Controls.Add(this.outputAsTxtCheckBox);
             this.outputLogGroup.Controls.Add(this.generateEventLogCheckBox);
             this.outputLogGroup.Controls.Add(this.outputSeparateCheckBox);
@@ -70,10 +73,20 @@
             this.outputLogGroup.Controls.Add(this.outputDirectoryTextBox);
             this.outputLogGroup.Location = new System.Drawing.Point(12, 27);
             this.outputLogGroup.Name = "outputLogGroup";
-            this.outputLogGroup.Size = new System.Drawing.Size(382, 173);
+            this.outputLogGroup.Size = new System.Drawing.Size(380, 173);
             this.outputLogGroup.TabIndex = 1;
             this.outputLogGroup.TabStop = false;
             this.outputLogGroup.Text = "Outputting Logs";
+            // 
+            // browseForOutputDirButton
+            // 
+            this.browseForOutputDirButton.Location = new System.Drawing.Point(299, 19);
+            this.browseForOutputDirButton.Name = "browseForOutputDirButton";
+            this.browseForOutputDirButton.Size = new System.Drawing.Size(75, 23);
+            this.browseForOutputDirButton.TabIndex = 9;
+            this.browseForOutputDirButton.Text = "Browse";
+            this.browseForOutputDirButton.UseVisualStyleBackColor = true;
+            this.browseForOutputDirButton.Click += new System.EventHandler(this.browseForOutputDirButton_Click);
             // 
             // outputAsTxtCheckBox
             // 
@@ -181,16 +194,17 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outputDirectoryTextBox.Location = new System.Drawing.Point(108, 22);
             this.outputDirectoryTextBox.Name = "outputDirectoryTextBox";
-            this.outputDirectoryTextBox.Size = new System.Drawing.Size(268, 23);
+            this.outputDirectoryTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.outputDirectoryTextBox.Size = new System.Drawing.Size(185, 23);
             this.outputDirectoryTextBox.TabIndex = 1;
             // 
             // applyButton
             // 
             this.applyButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.applyButton.Location = new System.Drawing.Point(319, 574);
+            this.applyButton.Location = new System.Drawing.Point(319, 416);
             this.applyButton.Name = "applyButton";
-            this.applyButton.Size = new System.Drawing.Size(75, 23);
+            this.applyButton.Size = new System.Drawing.Size(73, 23);
             this.applyButton.TabIndex = 0;
             this.applyButton.Text = "Apply";
             this.applyButton.UseVisualStyleBackColor = true;
@@ -199,9 +213,9 @@
             // 
             this.revertButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.revertButton.Location = new System.Drawing.Point(238, 574);
+            this.revertButton.Location = new System.Drawing.Point(240, 416);
             this.revertButton.Name = "revertButton";
-            this.revertButton.Size = new System.Drawing.Size(75, 23);
+            this.revertButton.Size = new System.Drawing.Size(73, 23);
             this.revertButton.TabIndex = 10;
             this.revertButton.Text = "Undo";
             this.revertButton.UseVisualStyleBackColor = true;
@@ -211,9 +225,9 @@
             // 
             this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.closeButton.Location = new System.Drawing.Point(12, 574);
+            this.closeButton.Location = new System.Drawing.Point(12, 416);
             this.closeButton.Name = "closeButton";
-            this.closeButton.Size = new System.Drawing.Size(75, 23);
+            this.closeButton.Size = new System.Drawing.Size(73, 23);
             this.closeButton.TabIndex = 9;
             this.closeButton.Text = "Close";
             this.closeButton.UseVisualStyleBackColor = true;
@@ -223,7 +237,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(406, 609);
+            this.ClientSize = new System.Drawing.Size(404, 451);
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.revertButton);
             this.Controls.Add(this.applyButton);
@@ -231,7 +245,7 @@
             this.Controls.Add(this.settingsLabel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.MinimumSize = new System.Drawing.Size(422, 648);
+            this.MinimumSize = new System.Drawing.Size(420, 490);
             this.Name = "Form3";
             this.Text = "Text Cleaner";
             this.outputLogGroup.ResumeLayout(false);
@@ -257,5 +271,7 @@
         private Button revertButton;
         private Button closeButton;
         private CheckBox outputAsTxtCheckBox;
+        private FolderBrowserDialog folderBrowserDialog1;
+        private Button browseForOutputDirButton;
     }
 }

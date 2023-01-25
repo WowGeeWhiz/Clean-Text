@@ -175,5 +175,41 @@ namespace Clean_Text
             if (isLoading) return;
 
         }
+
+        private void browseForOutputDirButton_Click(object sender, EventArgs e)
+        {
+            string tempDir = "";
+            try
+            {
+                FolderBrowserDialog browser = new FolderBrowserDialog();
+                browser.InitialDirectory = outputDirectoryTextBox.Text;
+                browser.Description = "Select output folder";
+                browser.UseDescriptionForTitle = true;
+
+
+                if (browser.ShowDialog() == DialogResult.OK)
+                {
+                    tempDir = browser.SelectedPath;
+                    WriteToFile(tempDir + "\\test.txt", new string[] { "test file" });
+
+                }
+
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("The program cannot access that directory.\nTry running the program as an administrator, or changing the security of the directory");
+                tempDir = "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+                tempDir = "";
+            }
+            finally
+            {
+                if (File.Exists(tempDir + "\\test.txt")) File.Delete(tempDir + "\\test.txt");
+                if (tempDir != "") outputDirectoryTextBox.Text = tempDir;
+            }
+        }
     }
 }

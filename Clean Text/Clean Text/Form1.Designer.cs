@@ -268,7 +268,7 @@
             this.Controls.Add(this.entryLabel);
             this.Controls.Add(this.entryTextBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(419, 488);
+            this.MinimumSize = new System.Drawing.Size(420, 490);
             this.Name = "Form1";
             this.Text = "Text Cleaner";
             this.ResumeLayout(false);
