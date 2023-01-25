@@ -31,15 +31,15 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form3));
             this.settingsLabel = new System.Windows.Forms.Label();
             this.outputLogGroup = new System.Windows.Forms.GroupBox();
-            this.outputDirectoryTextBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.outputOriginalCheckBox = new System.Windows.Forms.CheckBox();
-            this.outputRemovedCheckBox = new System.Windows.Forms.CheckBox();
-            this.outputReplaceCheckBox = new System.Windows.Forms.CheckBox();
-            this.outputCleanedCheckBox = new System.Windows.Forms.CheckBox();
+            this.outputAsTxtCheckBox = new System.Windows.Forms.CheckBox();
+            this.generateEventLogCheckBox = new System.Windows.Forms.CheckBox();
             this.outputSeparateCheckBox = new System.Windows.Forms.CheckBox();
-            this.checkBox6 = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.outputCleanedCheckBox = new System.Windows.Forms.CheckBox();
+            this.outputReplaceCheckBox = new System.Windows.Forms.CheckBox();
+            this.outputRemovedCheckBox = new System.Windows.Forms.CheckBox();
+            this.outputOriginalCheckBox = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.outputDirectoryTextBox = new System.Windows.Forms.TextBox();
             this.applyButton = new System.Windows.Forms.Button();
             this.revertButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
@@ -59,8 +59,8 @@
             // 
             this.outputLogGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputLogGroup.Controls.Add(this.button1);
-            this.outputLogGroup.Controls.Add(this.checkBox6);
+            this.outputLogGroup.Controls.Add(this.outputAsTxtCheckBox);
+            this.outputLogGroup.Controls.Add(this.generateEventLogCheckBox);
             this.outputLogGroup.Controls.Add(this.outputSeparateCheckBox);
             this.outputLogGroup.Controls.Add(this.outputCleanedCheckBox);
             this.outputLogGroup.Controls.Add(this.outputReplaceCheckBox);
@@ -75,25 +75,81 @@
             this.outputLogGroup.TabStop = false;
             this.outputLogGroup.Text = "Outputting Logs";
             // 
-            // outputDirectoryTextBox
+            // outputAsTxtCheckBox
             // 
-            this.outputDirectoryTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.outputAsTxtCheckBox.AutoSize = true;
+            this.outputAsTxtCheckBox.Location = new System.Drawing.Point(227, 73);
+            this.outputAsTxtCheckBox.Name = "outputAsTxtCheckBox";
+            this.outputAsTxtCheckBox.Size = new System.Drawing.Size(113, 19);
+            this.outputAsTxtCheckBox.TabIndex = 5;
+            this.outputAsTxtCheckBox.Text = "Output all as .txt";
+            this.outputAsTxtCheckBox.UseVisualStyleBackColor = true;
+            this.outputAsTxtCheckBox.CheckedChanged += new System.EventHandler(this.outputAsTxtCheckBox_CheckedChanged);
+            // 
+            // generateEventLogCheckBox
+            // 
+            this.generateEventLogCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputDirectoryTextBox.Location = new System.Drawing.Point(108, 22);
-            this.outputDirectoryTextBox.Name = "outputDirectoryTextBox";
-            this.outputDirectoryTextBox.Size = new System.Drawing.Size(268, 23);
-            this.outputDirectoryTextBox.TabIndex = 0;
+            this.generateEventLogCheckBox.AutoSize = true;
+            this.generateEventLogCheckBox.Location = new System.Drawing.Point(6, 148);
+            this.generateEventLogCheckBox.Name = "generateEventLogCheckBox";
+            this.generateEventLogCheckBox.Size = new System.Drawing.Size(128, 19);
+            this.generateEventLogCheckBox.TabIndex = 8;
+            this.generateEventLogCheckBox.Text = "Generate Event Log";
+            this.generateEventLogCheckBox.UseVisualStyleBackColor = true;
+            this.generateEventLogCheckBox.CheckedChanged += new System.EventHandler(this.generateEventLogCheckBox_CheckedChanged);
             // 
-            // label1
+            // outputSeparateCheckBox
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.outputSeparateCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 30);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(99, 15);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Output Directory:";
+            this.outputSeparateCheckBox.AutoSize = true;
+            this.outputSeparateCheckBox.Location = new System.Drawing.Point(227, 48);
+            this.outputSeparateCheckBox.Name = "outputSeparateCheckBox";
+            this.outputSeparateCheckBox.Size = new System.Drawing.Size(149, 19);
+            this.outputSeparateCheckBox.TabIndex = 3;
+            this.outputSeparateCheckBox.Text = "Output to separate files";
+            this.outputSeparateCheckBox.UseVisualStyleBackColor = true;
+            this.outputSeparateCheckBox.CheckedChanged += new System.EventHandler(this.outputSeparateCheckBox_CheckedChanged);
+            // 
+            // outputCleanedCheckBox
+            // 
+            this.outputCleanedCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.outputCleanedCheckBox.AutoSize = true;
+            this.outputCleanedCheckBox.Location = new System.Drawing.Point(6, 123);
+            this.outputCleanedCheckBox.Name = "outputCleanedCheckBox";
+            this.outputCleanedCheckBox.Size = new System.Drawing.Size(131, 19);
+            this.outputCleanedCheckBox.TabIndex = 7;
+            this.outputCleanedCheckBox.Text = "Output cleaned text";
+            this.outputCleanedCheckBox.UseVisualStyleBackColor = true;
+            this.outputCleanedCheckBox.CheckedChanged += new System.EventHandler(this.outputCleanedCheckBox_CheckedChanged);
+            // 
+            // outputReplaceCheckBox
+            // 
+            this.outputReplaceCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.outputReplaceCheckBox.AutoSize = true;
+            this.outputReplaceCheckBox.Location = new System.Drawing.Point(6, 98);
+            this.outputReplaceCheckBox.Name = "outputReplaceCheckBox";
+            this.outputReplaceCheckBox.Size = new System.Drawing.Size(156, 19);
+            this.outputReplaceCheckBox.TabIndex = 6;
+            this.outputReplaceCheckBox.Text = "Output replacement text";
+            this.outputReplaceCheckBox.UseVisualStyleBackColor = true;
+            this.outputReplaceCheckBox.CheckedChanged += new System.EventHandler(this.outputReplaceCheckBox_CheckedChanged);
+            // 
+            // outputRemovedCheckBox
+            // 
+            this.outputRemovedCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.outputRemovedCheckBox.AutoSize = true;
+            this.outputRemovedCheckBox.Location = new System.Drawing.Point(6, 73);
+            this.outputRemovedCheckBox.Name = "outputRemovedCheckBox";
+            this.outputRemovedCheckBox.Size = new System.Drawing.Size(137, 19);
+            this.outputRemovedCheckBox.TabIndex = 4;
+            this.outputRemovedCheckBox.Text = "Output removed text";
+            this.outputRemovedCheckBox.UseVisualStyleBackColor = true;
+            this.outputRemovedCheckBox.CheckedChanged += new System.EventHandler(this.outputRemovedCheckBox_CheckedChanged);
             // 
             // outputOriginalCheckBox
             // 
@@ -106,77 +162,27 @@
             this.outputOriginalCheckBox.TabIndex = 2;
             this.outputOriginalCheckBox.Text = "Output original text";
             this.outputOriginalCheckBox.UseVisualStyleBackColor = true;
+            this.outputOriginalCheckBox.CheckedChanged += new System.EventHandler(this.outputOriginalCheckBox_CheckedChanged);
             // 
-            // outputRemovedCheckBox
+            // label1
             // 
-            this.outputRemovedCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputRemovedCheckBox.AutoSize = true;
-            this.outputRemovedCheckBox.Location = new System.Drawing.Point(6, 73);
-            this.outputRemovedCheckBox.Name = "outputRemovedCheckBox";
-            this.outputRemovedCheckBox.Size = new System.Drawing.Size(137, 19);
-            this.outputRemovedCheckBox.TabIndex = 3;
-            this.outputRemovedCheckBox.Text = "Output removed text";
-            this.outputRemovedCheckBox.UseVisualStyleBackColor = true;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 30);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(99, 15);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Output Directory:";
             // 
-            // outputReplaceCheckBox
+            // outputDirectoryTextBox
             // 
-            this.outputReplaceCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.outputDirectoryTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputReplaceCheckBox.AutoSize = true;
-            this.outputReplaceCheckBox.Location = new System.Drawing.Point(6, 98);
-            this.outputReplaceCheckBox.Name = "outputReplaceCheckBox";
-            this.outputReplaceCheckBox.Size = new System.Drawing.Size(156, 19);
-            this.outputReplaceCheckBox.TabIndex = 4;
-            this.outputReplaceCheckBox.Text = "Output replacement text";
-            this.outputReplaceCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // outputCleanedCheckBox
-            // 
-            this.outputCleanedCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputCleanedCheckBox.AutoSize = true;
-            this.outputCleanedCheckBox.Location = new System.Drawing.Point(6, 123);
-            this.outputCleanedCheckBox.Name = "outputCleanedCheckBox";
-            this.outputCleanedCheckBox.Size = new System.Drawing.Size(131, 19);
-            this.outputCleanedCheckBox.TabIndex = 5;
-            this.outputCleanedCheckBox.Text = "Output cleaned text";
-            this.outputCleanedCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // outputSeparateCheckBox
-            // 
-            this.outputSeparateCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputSeparateCheckBox.AutoSize = true;
-            this.outputSeparateCheckBox.Location = new System.Drawing.Point(227, 48);
-            this.outputSeparateCheckBox.Name = "outputSeparateCheckBox";
-            this.outputSeparateCheckBox.Size = new System.Drawing.Size(149, 19);
-            this.outputSeparateCheckBox.TabIndex = 6;
-            this.outputSeparateCheckBox.Text = "Output to separate files";
-            this.outputSeparateCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // checkBox6
-            // 
-            this.checkBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBox6.AutoSize = true;
-            this.checkBox6.Location = new System.Drawing.Point(6, 148);
-            this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(128, 19);
-            this.checkBox6.TabIndex = 7;
-            this.checkBox6.Text = "Generate Event Log";
-            this.checkBox6.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(265, 144);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(111, 23);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Reset to Defaults";
-            this.button1.UseVisualStyleBackColor = true;
+            this.outputDirectoryTextBox.Location = new System.Drawing.Point(108, 22);
+            this.outputDirectoryTextBox.Name = "outputDirectoryTextBox";
+            this.outputDirectoryTextBox.Size = new System.Drawing.Size(268, 23);
+            this.outputDirectoryTextBox.TabIndex = 1;
             // 
             // applyButton
             // 
@@ -185,7 +191,7 @@
             this.applyButton.Location = new System.Drawing.Point(319, 574);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(75, 23);
-            this.applyButton.TabIndex = 2;
+            this.applyButton.TabIndex = 0;
             this.applyButton.Text = "Apply";
             this.applyButton.UseVisualStyleBackColor = true;
             // 
@@ -196,9 +202,10 @@
             this.revertButton.Location = new System.Drawing.Point(238, 574);
             this.revertButton.Name = "revertButton";
             this.revertButton.Size = new System.Drawing.Size(75, 23);
-            this.revertButton.TabIndex = 3;
+            this.revertButton.TabIndex = 10;
             this.revertButton.Text = "Undo";
             this.revertButton.UseVisualStyleBackColor = true;
+            this.revertButton.Click += new System.EventHandler(this.revertButton_Click);
             // 
             // closeButton
             // 
@@ -207,9 +214,10 @@
             this.closeButton.Location = new System.Drawing.Point(12, 574);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 4;
+            this.closeButton.TabIndex = 9;
             this.closeButton.Text = "Close";
             this.closeButton.UseVisualStyleBackColor = true;
+            this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
             // Form3
             // 
@@ -239,8 +247,7 @@
         private GroupBox outputLogGroup;
         private Label label1;
         private TextBox outputDirectoryTextBox;
-        private Button button1;
-        private CheckBox checkBox6;
+        private CheckBox generateEventLogCheckBox;
         private CheckBox outputSeparateCheckBox;
         private CheckBox outputCleanedCheckBox;
         private CheckBox outputReplaceCheckBox;
@@ -249,5 +256,6 @@
         private Button applyButton;
         private Button revertButton;
         private Button closeButton;
+        private CheckBox outputAsTxtCheckBox;
     }
 }

@@ -155,6 +155,12 @@ namespace Clean_Text
             }
         }
 
+        private void settingsButton_Click(object sender, EventArgs e)
+        {
+            Form settings = new Form3(); //create a new settings form
+            settings.ShowDialog(); //show form 3 and pause until it is closed
+        }
+
         //replace text button is checked/unchecked
         private void replaceTextButton_CheckedChanged(object sender, EventArgs e)
         {
