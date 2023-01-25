@@ -25,14 +25,6 @@ namespace Clean_Text
             ReloadSavedValues();
         }
 
-        private bool StringToBool(string input)
-        {
-            if (input == "1") return true;
-            if (input == "0") return false;
-            MessageBox.Show("Error loading bool, no valid input\nReturning false...");
-            return false;
-        }
-
         private void SetEnabledStates()
         {
             if (outputOriginalCheckBox.Checked && !(outputRemovedCheckBox.Checked || outputReplaceCheckBox.Checked || outputCleanedCheckBox.Checked)) outputOriginalCheckBox.Enabled = false;
@@ -56,13 +48,13 @@ namespace Clean_Text
 
             outputDirectoryTextBox.Text = "";
             outputDirectoryTextBox.PlaceholderText = settings[0, 1];
-            outputOriginalCheckBox.Checked = StringToBool(settings[1, 1]);
-            outputRemovedCheckBox.Checked = StringToBool(settings[2, 1]);
-            outputReplaceCheckBox.Checked = StringToBool(settings[3, 1]);
-            outputCleanedCheckBox.Checked = StringToBool(settings[4, 1]);
-            generateEventLogCheckBox.Checked = StringToBool(settings[5, 1]);
-            outputSeparateCheckBox.Checked = StringToBool(settings[6, 1]);
-            outputAsTxtCheckBox.Checked = StringToBool(settings[7, 1]);
+            outputOriginalCheckBox.Checked = Preferences.StringToBool(settings[1, 1]);
+            outputRemovedCheckBox.Checked = Preferences.StringToBool(settings[2, 1]);
+            outputReplaceCheckBox.Checked = Preferences.StringToBool(settings[3, 1]);
+            outputCleanedCheckBox.Checked = Preferences.StringToBool(settings[4, 1]);
+            generateEventLogCheckBox.Checked = Preferences.StringToBool(settings[5, 1]);
+            outputSeparateCheckBox.Checked = Preferences.StringToBool(settings[6, 1]);
+            outputAsTxtCheckBox.Checked = Preferences.StringToBool(settings[7, 1]);
 
             for (int i = 0; i < settings.GetLength(0); i++)
             {

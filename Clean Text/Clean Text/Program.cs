@@ -69,6 +69,14 @@ namespace Clean_Text
                 }
             }
 
+            public static bool StringToBool(string input)
+            {
+                if (input == "1") return true;
+                if (input == "0") return false;
+                MessageBox.Show("Error loading bool, no valid input\nReturning false...");
+                return false;
+            }
+
             static private string[] DoubleArrayToSingle(string[,] input)
             {
                 List<string> temp = new List<string>();

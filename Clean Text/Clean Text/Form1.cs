@@ -3,7 +3,7 @@ namespace Clean_Text
     public partial class Form1 : Form
     {
         //booleans for use throughout program
-        bool loading, validEntry, validRemove, validReplace;
+        bool loading, validEntry, validRemove, validReplace, forceLogInputOutput, forceLogReplace, forceLogRemove;
         string tempLoadedValue = "";
 
         public Form1()
@@ -17,12 +17,14 @@ namespace Clean_Text
         {
             loading = true; //start loading (disable other methods)
 
-            validEntry = validRemove = validReplace = false; //mark entries invalid
+            validEntry = validRemove = validReplace = forceLogRemove = forceLogReplace = forceLogInputOutput = false; //reset bools
 
             //empty and disable replace text box
             replaceTextBox.Enabled = false;
             replaceFromLoadButton.Enabled = false;
             replaceTextBox.Text = "";
+
+            generateLogCheck.Enabled = true;
 
             replaceTextButton.Checked = false; //uncheck replace text button
 
@@ -44,6 +46,13 @@ namespace Clean_Text
                 else runButton.Enabled = true; //otherwise enable run button
             }
             else runButton.Enabled = false; //disable run button
+
+            if (forceLogReplace || forceLogInputOutput || forceLogRemove)
+            {
+                generateLogCheck.Checked = true;
+                generateLogCheck.Enabled = false;
+            }
+            else generateLogCheck.Enabled = true;
         }
 
         //text in remove text box changed
@@ -52,6 +61,10 @@ namespace Clean_Text
             if (loading) return; //if loading break
             if (removeTextBox.Text == null || removeTextBox.Text == "") validRemove = false; //if empty, mark as invalid
             else validRemove = true; //otherwise valid
+
+            if (removeTextBox.Text.Length >= 36000) forceLogRemove = true;
+            else forceLogRemove = false;
+
             CheckValid(); //check for readiness to run
         }
 
@@ -61,6 +74,10 @@ namespace Clean_Text
             if (loading) return; //if loading break
             if (replaceTextBox.Text == null || replaceTextBox.Text == "") validReplace = false; //if empty, mark as invalid
             else validReplace = true; //otherwise valid
+
+            if (replaceTextBox.Text.Length >= 36000) forceLogReplace = true;
+            else forceLogReplace = false;
+
             CheckValid(); //check for readiness to run
         }
 
@@ -80,6 +97,8 @@ namespace Clean_Text
         //when run button is clicked
         private void runButton_Click(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
+
             //assign variables for use
             string tempOutput = "";
             string input = entryTextBox.Text;
@@ -87,25 +106,64 @@ namespace Clean_Text
             string replace = replaceTextBox.Text;
             bool repeat = true;
 
+
+            bool log = generateLogCheck.Checked;
+            Log generatedLog = new Log();
+
+            if (log)
+            {
+                if (generatedLog.original || forceLogInputOutput) generatedLog.AddOriginal(new string[] { input });
+                if (generatedLog.removed || forceLogRemove) generatedLog.AddRemoved(new string[] { remove });
+                if (generatedLog.replaced || forceLogReplace) generatedLog.AddReplaced(new string[] { replace });
+            }
+
+            int numKeysFound = 0;
+            int numKeysRemoved = 0;
+            int numKeysReplaced = 0;
+            List<string> events = new List<string>();
+            events.Add("Process started at " + DateTime.Now.ToString("MM.dd.yy-hh.mm.ss"));
             while (repeat) //loop until done
             {
                 int temp; //temp integer for use
                 if (input.Contains(remove)) //if key is in the input variable
                 {
                     temp = input.IndexOf(remove); //temp is the index of the key
+                    numKeysFound++;
+                    events.Add("Key found at " + (temp + tempOutput.Length));
                     tempOutput += input.Substring(0, temp); //add section of input before key to output
-                    if (replaceTextButton.Checked) tempOutput += replace; //add replace value if checked
+                    numKeysRemoved++;
+                    events.Add("Key removed at " + (temp + tempOutput.Length));
+                    if (replaceTextButton.Checked)
+                    {
+                        tempOutput += replace; //add replace value if checked
+                        numKeysReplaced++;
+                        events.Add("Key replaced at " + (temp + tempOutput.Length));
+                    }
                 }
                 else //if key is not in the remaining input
                 {
+                    events.Add("No remaining keys");
                     tempOutput += input; //add the remaining input to output
                     break; //break repeat loop
                 }
                 input = input.Substring(temp + remove.Length); //shorten input
             }
+            events.Add("Keys found: " + numKeysFound);
+            events.Add("Keys removed: " + numKeysRemoved);
+            events.Add("Keys replaced: " + numKeysReplaced);
+            events.Add("Process ended at " + DateTime.Now.ToString("MM.dd.yy-hh.mm.ss"));
+
+            if (log)
+            {
+                if (generatedLog.cleaned || forceLogInputOutput) generatedLog.AddCleaned(new string[] { tempOutput });
+                if (generatedLog.events) generatedLog.AddEvents(events.ToArray());
+                generatedLog.GenerateLog();
+            }
 
             Clipboard.SetText(tempOutput); //copy output to clipboard
             MessageBox.Show("\"" + tempOutput + "\" has been copied to your clipboard."); //display output
+
+            this.Cursor = Cursors.Default;
             ResetForm(); //reset the form
         }
 
@@ -190,6 +248,10 @@ namespace Clean_Text
             if (loading) return; //break if loading
             if (entryTextBox.Text == null || entryTextBox.Text == "") validEntry = false; //if empty, mark as invalid
             else validEntry = true; //otherwise valid
+
+            if (entryTextBox.Text.Length >= 36000) forceLogInputOutput = true;
+            else forceLogInputOutput = false;
+
             CheckValid(); //check for readiness to run
         }
     }
