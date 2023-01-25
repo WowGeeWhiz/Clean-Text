@@ -15,9 +15,20 @@ namespace Clean_Text
                 {"outputCleaned=","1"},
                 {"generateLog=","0"},
                 {"outputSeparate=","0"},
-                {"outputTxt=","1" }
+                {"outputTxt=","1"},
+                {"logName=","CleanedText-"}
             };
             public static string[,] currentConfig = prefs;
+            static char[] invalidDirChars = new char[] { '/', '\\', ':', ':', '"', '<', '>' };
+
+            public static bool CheckVaildNameChars(string name)
+            {
+                foreach (char c in invalidDirChars)
+                {
+                    if (name.Contains(c)) return false;
+                }
+                return true;
+            }
 
             public static void LoadPrefs()
             {
@@ -92,6 +103,7 @@ namespace Clean_Text
                 bool temp = true;
                 try
                 {
+                    if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
                     File.WriteAllLines(dir + "\\test.txt", new string[] { "test file" });
                 }
                 catch (UnauthorizedAccessException)

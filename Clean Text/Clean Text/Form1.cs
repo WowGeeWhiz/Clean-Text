@@ -17,7 +17,7 @@ namespace Clean_Text
         {
             loading = true; //start loading (disable other methods)
 
-            validEntry = validRemove = validReplace = forceLogRemove = forceLogReplace = forceLogInput, forceLogOutput = false; //reset bools
+            validEntry = validRemove = validReplace = forceLogRemove = forceLogReplace = forceLogInput = forceLogOutput = false; //reset bools
 
             //empty and disable replace text box
             replaceTextBox.Enabled = false;
@@ -164,8 +164,13 @@ namespace Clean_Text
                 generatedLog.GenerateLog();
             }
 
-            Clipboard.SetText(tempOutput); //copy output to clipboard
-            MessageBox.Show("\"" + tempOutput + "\" has been copied to your clipboard."); //display output
+            if (!log)
+            {
+                Clipboard.SetText(tempOutput); //copy output to clipboard
+                MessageBox.Show("Cleaned text has been copied to your clipboard."); //display output
+            }
+            else MessageBox.Show("Text cleaned and saved to generated file(s) at " + generatedLog.dir + "\n" +
+                "Files Generated: " + generatedLog.generatedFiles);
 
             this.Cursor = Cursors.Default;
             ResetForm(); //reset the form

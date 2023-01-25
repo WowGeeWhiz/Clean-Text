@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using static Clean_Text.Program;
@@ -11,31 +12,41 @@ namespace Clean_Text
     {
         string name;
         List<string> nameList = new List<string>();
-        string dir = Preferences.currentConfig[0, 1];
-        public bool original = Preferences.StringToBool(Preferences.currentConfig[1, 1]);
-        public bool removed = Preferences.StringToBool(Preferences.currentConfig[2, 1]);
-        public bool replaced = Preferences.StringToBool(Preferences.currentConfig[3, 1]);
-        public bool cleaned = Preferences.StringToBool(Preferences.currentConfig[4, 1]);
-        public bool events = Preferences.StringToBool(Preferences.currentConfig[5, 1]);
-        public bool separate = Preferences.StringToBool(Preferences.currentConfig[6, 1]);
-        public bool asTxt = Preferences.StringToBool(Preferences.currentConfig[7, 1]);
+        public string dir, addToName;
+        public bool original, removed, replaced, cleaned, events, separate, asTxt;
+        private bool emptyReplace;
 
         List<string[]> contents = new List<string[]>();
+
+        public string generatedFiles = "";
 
         public Log()
         {
             ResetBoolsAndName();
         }
 
-        public void ResetBoolsAndName(bool forceO = false, bool forceRm = false, bool forceRp = false, bool forceC = false, bool forceE = false)
+        public void ResetBoolsAndName(bool forceO = false, bool forceRm = false, bool forceRp = false, bool forceC = false, bool forceE = false, bool notReplace = false)
         {
+            Preferences.LoadPrefs();
+
+            dir = Preferences.currentConfig[0, 1];
+            original = Preferences.StringToBool(Preferences.currentConfig[1, 1]);
+            removed = Preferences.StringToBool(Preferences.currentConfig[2, 1]);
+            replaced = Preferences.StringToBool(Preferences.currentConfig[3, 1]);
+            cleaned = Preferences.StringToBool(Preferences.currentConfig[4, 1]);
+            events = Preferences.StringToBool(Preferences.currentConfig[5, 1]);
+            separate = Preferences.StringToBool(Preferences.currentConfig[6, 1]);
+            asTxt = Preferences.StringToBool(Preferences.currentConfig[7, 1]);
+
             if (forceO) original = true;
             if (forceRm) removed = true;
             if (forceRp) replaced = true;
             if (forceC) cleaned = true;
             if (forceE) events = true;
+            emptyReplace = notReplace;
 
-            name = "\\";
+            nameList = new List<string>();
+            name = "\\" + Preferences.currentConfig[8, 1];
             string time = DateTime.Now.ToString("-MM.dd.yy-hh.mm.ss");
 
             if (!separate)
@@ -51,12 +62,12 @@ namespace Clean_Text
             }
             else
             {
-                if (original || forceOC) nameList.Add("\\original" + time);
-                if (removed || forceRm) nameList.Add("\\removed" + time);
-                if (replaced || forceRp) nameList.Add("\\replaced" + time);
-                if (cleaned || forceOC) nameList.Add("\\cleaned" + time);
-                if (events) nameList.Add("\\events" + time);
-
+                string temp = "\\" + Preferences.currentConfig[8, 1];
+                if (original) nameList.Add(temp + "original" + time);
+                if (removed) nameList.Add(temp + "removed" + time);
+                if (replaced) nameList.Add(temp + "replaced" + time);
+                if (cleaned) nameList.Add(temp + "cleaned" + time);
+                if (events) nameList.Add(temp + "events" + time);
 
                 for (int a = 0; a < nameList.Count; a++)
                 {
@@ -70,12 +81,15 @@ namespace Clean_Text
         {
             try
             {
+                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+
                 if (separate)
                 {
                     int index = 0;
                     for (int a = 0; a < nameList.Count; a++)
                     {
-                        File.WriteAllLines(@Preferences.currentConfig[0, 1] + @nameList[index], contents[index]);
+                        File.WriteAllLines(dir + @nameList[index], contents[index]);
+                        generatedFiles = " " + generatedFiles + dir + @nameList[index];
                         index++;
                     }
                 }
@@ -90,13 +104,18 @@ namespace Clean_Text
                         }
                         lines.Add("\n\n\n");
                     }
-                    File.WriteAllLines(@Preferences.currentConfig[0, 1] + @name, lines.ToArray());
+                    File.WriteAllLines(dir + @name, lines.ToArray());
+                    generatedFiles = generatedFiles + dir + @name;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
+                return;
             }
+
+            MessageBox.Show("Logs generated at " + dir);
+
         }
 
         private string[] CopyToAddArray(string[] input, string[] newArray)
@@ -121,7 +140,7 @@ namespace Clean_Text
         public void AddRemoved(string[] removedTxt)
         {
             string[] temp = new string[removedTxt.Length + 2];
-            temp[0] = "Text that was removed: ";
+            temp[0] = "Key: ";
             temp = CopyToAddArray(removedTxt, temp);
             contents.Add(temp);
         }
@@ -129,7 +148,8 @@ namespace Clean_Text
         public void AddReplaced(string[] replacedTxt)
         {
             string[] temp = new string[replacedTxt.Length + 2];
-            temp[0] = "Text that was inserted: ";
+            if (!emptyReplace) temp[0] = "Keys replaced with: ";
+            else temp[0] = "Key was not replaced";
             temp = CopyToAddArray(replacedTxt, temp);
             contents.Add(temp);
         }
@@ -137,7 +157,7 @@ namespace Clean_Text
         public void AddCleaned(string[] cleanedTxt)
         {
             string[] temp = new string[cleanedTxt.Length + 2];
-            temp[0] = "Finished text: ";
+            temp[0] = "Cleaned text: ";
             temp = CopyToAddArray(cleanedTxt, temp);
             contents.Add(temp);
         }

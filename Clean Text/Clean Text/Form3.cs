@@ -16,7 +16,7 @@ namespace Clean_Text
     public partial class Form3 : Form
     {
 
-        bool isLoading = false;
+        bool isLoading = false, validLogPrefix;
         string[] tempArray = new string[Preferences.prefs.GetLength(0)];
 
         public Form3()
@@ -37,17 +37,23 @@ namespace Clean_Text
             else outputCleanedCheckBox.Enabled = true;
         }
 
-        private void ReloadSavedValues()
+        private void ReloadSavedValues(bool revertToDefault = false)
         {
             this.Cursor = Cursors.WaitCursor;
             isLoading = true;
 
             Preferences.LoadPrefs();
 
-            string[,] settings = Preferences.currentConfig;
+            string[,] settings;
+
+            if (!revertToDefault) settings = Preferences.currentConfig;
+            else settings = Preferences.prefs;
 
             outputDirectoryTextBox.Text = "";
             outputDirectoryTextBox.PlaceholderText = settings[0, 1];
+            logPrefixTextBox.Text = "";
+            logPrefixTextBox.PlaceholderText = settings[8, 1];
+            validLogPrefix = true;
             outputOriginalCheckBox.Checked = Preferences.StringToBool(settings[1, 1]);
             outputRemovedCheckBox.Checked = Preferences.StringToBool(settings[2, 1]);
             outputReplaceCheckBox.Checked = Preferences.StringToBool(settings[3, 1]);
@@ -151,6 +157,12 @@ namespace Clean_Text
 
         private void applyButton_Click(object sender, EventArgs e)
         {
+            if (!validLogPrefix)
+            {
+                MessageBox.Show(tempArray[8] + " is empty or contains invalid characters.");
+                return;
+            }
+
             this.Cursor = Cursors.WaitCursor;
 
             if (!Preferences.AccessibleDirectory(tempArray[0]))
@@ -164,6 +176,7 @@ namespace Clean_Text
             this.Cursor = Cursors.Default;
 
             MessageBox.Show("Preferences updated.");
+            Close();
         }
 
         private void outputDirectoryTextBox_TextChanged(object sender, EventArgs e)
@@ -171,6 +184,20 @@ namespace Clean_Text
             if (isLoading) return;
             if (outputDirectoryTextBox.Text == "" || outputDirectoryTextBox.Text == " ") tempArray[0] = Preferences.currentConfig[0, 1];
             tempArray[0] = outputDirectoryTextBox.Text;
+        }
+
+        private void defaultButton_Click(object sender, EventArgs e)
+        {
+            ReloadSavedValues(true);
+        }
+
+        private void logPrefixTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (isLoading) return;
+            if (logPrefixTextBox.Text == "" || logPrefixTextBox.Text == null || (logPrefixTextBox.Text != " " && Preferences.CheckVaildNameChars(logPrefixTextBox.Text))) validLogPrefix = true;
+            else validLogPrefix = false;
+
+            if (validLogPrefix) tempArray[8] = logPrefixTextBox.Text;
         }
     }
 }
