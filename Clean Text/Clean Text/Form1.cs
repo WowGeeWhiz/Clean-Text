@@ -110,6 +110,8 @@ namespace Clean_Text
             bool log = generateLogCheck.Checked;
             Log generatedLog = new Log();
 
+            generatedLog.ResetName(forceLogInputOutput, forceLogRemove, forceLogReplace);
+
             if (log)
             {
                 if (generatedLog.original || forceLogInputOutput) generatedLog.AddOriginal(new string[] { input });

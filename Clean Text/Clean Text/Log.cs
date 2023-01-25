@@ -24,15 +24,21 @@ namespace Clean_Text
 
         public Log()
         {
+            ResetName();
+            
+        }
+
+        public void ResetName(bool forceOC = false, bool forceRm = false, bool forceRp = false)
+        {
             name = "\\";
             string time = DateTime.Now.ToString("-MM.dd.yy-hh.mm.ss");
 
             if (!separate)
             {
-                if (original) name += "O";
-                if (removed) name += "Rm";
-                if (replaced) name += "Rp";
-                if (cleaned) name += "C";
+                if (original || forceOC) name += "O";
+                if (removed || forceRm) name += "Rm";
+                if (replaced || forceRp) name += "Rp";
+                if (cleaned || forceOC) name += "C";
                 if (events) name += "E";
                 name += time;
                 if (asTxt) name += ".txt";
@@ -40,10 +46,10 @@ namespace Clean_Text
             }
             else
             {
-                if (original) nameList.Add("\\original" + time);
-                if (removed) nameList.Add("\\removed" + time);
-                if (replaced) nameList.Add("\\replaced" + time);
-                if (cleaned) nameList.Add("\\cleaned" + time);
+                if (original || forceOC) nameList.Add("\\original" + time);
+                if (removed || forceRm) nameList.Add("\\removed" + time);
+                if (replaced || forceRp) nameList.Add("\\replaced" + time);
+                if (cleaned || forceOC) nameList.Add("\\cleaned" + time);
                 if (events) nameList.Add("\\events" + time);
 
 
@@ -53,7 +59,6 @@ namespace Clean_Text
                     else nameList[a] = nameList[a] + ".log";
                 }
             }
-            
         }
 
         public void GenerateLog()
