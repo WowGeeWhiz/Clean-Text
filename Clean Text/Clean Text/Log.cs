@@ -24,21 +24,26 @@ namespace Clean_Text
 
         public Log()
         {
-            ResetName();
-            
+            ResetBoolsAndName();
         }
 
-        public void ResetName(bool forceOC = false, bool forceRm = false, bool forceRp = false)
+        public void ResetBoolsAndName(bool forceO = false, bool forceRm = false, bool forceRp = false, bool forceC = false, bool forceE = false)
         {
+            if (forceO) original = true;
+            if (forceRm) removed = true;
+            if (forceRp) replaced = true;
+            if (forceC) cleaned = true;
+            if (forceE) events = true;
+
             name = "\\";
             string time = DateTime.Now.ToString("-MM.dd.yy-hh.mm.ss");
 
             if (!separate)
             {
-                if (original || forceOC) name += "O";
-                if (removed || forceRm) name += "Rm";
-                if (replaced || forceRp) name += "Rp";
-                if (cleaned || forceOC) name += "C";
+                if (original) name += "O";
+                if (removed) name += "Rm";
+                if (replaced) name += "Rp";
+                if (cleaned) name += "C";
                 if (events) name += "E";
                 name += time;
                 if (asTxt) name += ".txt";

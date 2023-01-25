@@ -3,7 +3,7 @@ namespace Clean_Text
     public partial class Form1 : Form
     {
         //booleans for use throughout program
-        bool loading, validEntry, validRemove, validReplace, forceLogInputOutput, forceLogReplace, forceLogRemove;
+        bool loading, validEntry, validRemove, validReplace, forceLogInput, forceLogOutput, forceLogReplace, forceLogRemove;
         string tempLoadedValue = "";
 
         public Form1()
@@ -17,7 +17,7 @@ namespace Clean_Text
         {
             loading = true; //start loading (disable other methods)
 
-            validEntry = validRemove = validReplace = forceLogRemove = forceLogReplace = forceLogInputOutput = false; //reset bools
+            validEntry = validRemove = validReplace = forceLogRemove = forceLogReplace = forceLogInput, forceLogOutput = false; //reset bools
 
             //empty and disable replace text box
             replaceTextBox.Enabled = false;
@@ -47,10 +47,12 @@ namespace Clean_Text
             }
             else runButton.Enabled = false; //disable run button
 
-            if (forceLogReplace || forceLogInputOutput || forceLogRemove)
+            if (forceLogReplace || forceLogInput || forceLogOutput || forceLogRemove)
             {
                 generateLogCheck.Checked = true;
                 generateLogCheck.Enabled = false;
+
+                if (forceLogReplace || forceLogInput) forceLogOutput = true;
             }
             else generateLogCheck.Enabled = true;
         }
@@ -110,13 +112,13 @@ namespace Clean_Text
             bool log = generateLogCheck.Checked;
             Log generatedLog = new Log();
 
-            generatedLog.ResetName(forceLogInputOutput, forceLogRemove, forceLogReplace);
+            generatedLog.ResetBoolsAndName(forceLogInput, forceLogRemove, forceLogReplace, forceLogOutput, (forceLogInput && forceLogOutput && forceLogRemove && forceLogReplace));
 
             if (log)
             {
-                if (generatedLog.original || forceLogInputOutput) generatedLog.AddOriginal(new string[] { input });
-                if (generatedLog.removed || forceLogRemove) generatedLog.AddRemoved(new string[] { remove });
-                if (generatedLog.replaced || forceLogReplace) generatedLog.AddReplaced(new string[] { replace });
+                if (generatedLog.original) generatedLog.AddOriginal(new string[] { input });
+                if (generatedLog.removed) generatedLog.AddRemoved(new string[] { remove });
+                if (generatedLog.replaced) generatedLog.AddReplaced(new string[] { replace });
             }
 
             int numKeysFound = 0;
@@ -157,7 +159,7 @@ namespace Clean_Text
 
             if (log)
             {
-                if (generatedLog.cleaned || forceLogInputOutput) generatedLog.AddCleaned(new string[] { tempOutput });
+                if (generatedLog.cleaned) generatedLog.AddCleaned(new string[] { tempOutput });
                 if (generatedLog.events) generatedLog.AddEvents(events.ToArray());
                 generatedLog.GenerateLog();
             }
@@ -251,8 +253,8 @@ namespace Clean_Text
             if (entryTextBox.Text == null || entryTextBox.Text == "") validEntry = false; //if empty, mark as invalid
             else validEntry = true; //otherwise valid
 
-            if (entryTextBox.Text.Length >= 36000) forceLogInputOutput = true;
-            else forceLogInputOutput = false;
+            if (entryTextBox.Text.Length >= 36000) forceLogInput = true;
+            else forceLogInput = false;
 
             CheckValid(); //check for readiness to run
         }

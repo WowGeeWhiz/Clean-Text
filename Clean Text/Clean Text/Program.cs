@@ -15,7 +15,7 @@ namespace Clean_Text
                 {"outputCleaned=","1"},
                 {"generateLog=","0"},
                 {"outputSeparate=","0"},
-                {"outputTxt=","0" }
+                {"outputTxt=","1" }
             };
             public static string[,] currentConfig = prefs;
 
