@@ -1,5 +1,0 @@
-C:\GitHub\Clean-Text\Builds\Clean Text.exe
-C:\GitHub\Clean-Text\Builds\Clean Text.dll
-C:\GitHub\Clean-Text\Builds\Clean Text.deps.json
-C:\GitHub\Clean-Text\Builds\Clean Text.runtimeconfig.json
-C:\GitHub\Clean-Text\Builds\Clean Text.pdb
