@@ -4,7 +4,7 @@ namespace Clean_Text
     {
         //booleans for use throughout program
         bool loading, validEntry, validRemove, validReplace, forceLogInput, forceLogOutput, forceLogReplace, forceLogRemove;
-        string tempLoadedValue = "";
+        int forceLogCharLimit = 36000;
 
         public Form1()
         {
@@ -24,7 +24,7 @@ namespace Clean_Text
             replaceFromLoadButton.Enabled = false;
             replaceTextBox.Text = "";
 
-            generateLogCheck.Enabled = true;
+            generateLogCheck.Enabled = true; //enable the generate log check box
 
             replaceTextButton.Checked = false; //uncheck replace text button
 
@@ -47,14 +47,17 @@ namespace Clean_Text
             }
             else runButton.Enabled = false; //disable run button
 
+            //if forcing any log
             if (forceLogReplace || forceLogInput || forceLogOutput || forceLogRemove)
             {
+                //check generate log box, disable it
                 generateLogCheck.Checked = true;
                 generateLogCheck.Enabled = false;
 
+                //if the replace text or input text marked for force, force output as well
                 if (forceLogReplace || forceLogInput) forceLogOutput = true;
             }
-            else generateLogCheck.Enabled = true;
+            else generateLogCheck.Enabled = true; //if not forcing log, enable generate log box
         }
 
         //text in remove text box changed
@@ -64,7 +67,8 @@ namespace Clean_Text
             if (removeTextBox.Text == null || removeTextBox.Text == "") validRemove = false; //if empty, mark as invalid
             else validRemove = true; //otherwise valid
 
-            if (removeTextBox.Text.Length >= 36000) forceLogRemove = true;
+            //force log of removal text
+            if (removeTextBox.Text.Length >= forceLogCharLimit) forceLogRemove = true;
             else forceLogRemove = false;
 
             CheckValid(); //check for readiness to run
@@ -77,8 +81,23 @@ namespace Clean_Text
             if (replaceTextBox.Text == null || replaceTextBox.Text == "") validReplace = false; //if empty, mark as invalid
             else validReplace = true; //otherwise valid
 
-            if (replaceTextBox.Text.Length >= 36000) forceLogReplace = true;
+            //force log of replacement text
+            if (replaceTextBox.Text.Length >= forceLogCharLimit) forceLogReplace = true;
             else forceLogReplace = false;
+
+            CheckValid(); //check for readiness to run
+        }
+
+        //entry text box is changed
+        private void entryTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (loading) return; //break if loading
+            if (entryTextBox.Text == null || entryTextBox.Text == "") validEntry = false; //if empty, mark as invalid
+            else validEntry = true; //otherwise valid
+
+            //force log entry if too long
+            if (entryTextBox.Text.Length >= forceLogCharLimit) forceLogInput = true;
+            else forceLogInput = false;
 
             CheckValid(); //check for readiness to run
         }
@@ -99,7 +118,8 @@ namespace Clean_Text
         //when run button is clicked
         private void runButton_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
+            //use loading cursor
+            Cursor = Cursors.WaitCursor;
 
             //assign variables for use
             string tempOutput = "";
@@ -108,12 +128,16 @@ namespace Clean_Text
             string replace = replaceTextBox.Text;
             bool repeat = true;
 
-
+            //check for generating log
             bool log = generateLogCheck.Checked;
+
+            //new log instance
             Log generatedLog = new Log();
 
+            //set log values to match forced values
             generatedLog.ResetBoolsAndName(forceLogInput, forceLogRemove, forceLogReplace, forceLogOutput, (forceLogInput && forceLogOutput && forceLogRemove && forceLogReplace));
 
+            //if generating a log, add input, removal, and replacement texts (if logging)
             if (log)
             {
                 if (generatedLog.original) generatedLog.AddOriginal(new string[] { input });
@@ -121,22 +145,29 @@ namespace Clean_Text
                 if (generatedLog.replaced) generatedLog.AddReplaced(new string[] { replace });
             }
 
+            //setup event log
             int numKeysFound = 0;
             int numKeysRemoved = 0;
             int numKeysReplaced = 0;
             List<string> events = new List<string>();
             events.Add("Process started at " + DateTime.Now.ToString("MM.dd.yy-hh.mm.ss"));
+
             while (repeat) //loop until done
             {
                 int temp; //temp integer for use
                 if (input.Contains(remove)) //if key is in the input variable
                 {
-                    temp = input.IndexOf(remove); //temp is the index of the key
+                    //found key, mark index and increase count
+                    temp = input.IndexOf(remove);
                     numKeysFound++;
                     events.Add("Key found at " + (temp + tempOutput.Length));
-                    tempOutput += input.Substring(0, temp); //add section of input before key to output
+
+                    //remove key, increase count
+                    tempOutput += input.Substring(0, temp);
                     numKeysRemoved++;
                     events.Add("Key removed at " + (temp + tempOutput.Length));
+
+                    //if replacing, replace key, increase count
                     if (replaceTextButton.Checked)
                     {
                         tempOutput += replace; //add replace value if checked
@@ -152,27 +183,31 @@ namespace Clean_Text
                 }
                 input = input.Substring(temp + remove.Length); //shorten input
             }
-            events.Add("Keys found: " + numKeysFound);
+
+            //finish event log
+            events.Add("\n\nKeys found: " + numKeysFound);
             events.Add("Keys removed: " + numKeysRemoved);
             events.Add("Keys replaced: " + numKeysReplaced);
-            events.Add("Process ended at " + DateTime.Now.ToString("MM.dd.yy-hh.mm.ss"));
+            events.Add("\nProcess ended at " + DateTime.Now.ToString("MM.dd.yy-hh.mm.ss"));
 
+            //if generating log, add cleaned text and event log if using them
             if (log)
             {
                 if (generatedLog.cleaned) generatedLog.AddCleaned(new string[] { tempOutput });
                 if (generatedLog.events) generatedLog.AddEvents(events.ToArray());
-                generatedLog.GenerateLog();
-            }
 
-            if (!log)
+                //generate the actual log files
+                generatedLog.GenerateLog();
+                MessageBox.Show("Text cleaned and saved to generated file(s) at " + generatedLog.dir + "\n" +
+                "Files Generated: " + generatedLog.generatedFiles);
+            }
+            else //if not generating log
             {
                 Clipboard.SetText(tempOutput); //copy output to clipboard
                 MessageBox.Show("Cleaned text has been copied to your clipboard."); //display output
             }
-            else MessageBox.Show("Text cleaned and saved to generated file(s) at " + generatedLog.dir + "\n" +
-                "Files Generated: " + generatedLog.generatedFiles);
 
-            this.Cursor = Cursors.Default;
+            Cursor = Cursors.Default; //return cursor to normal
             ResetForm(); //reset the form
         }
 
@@ -196,6 +231,7 @@ namespace Clean_Text
             }
         }
 
+        //when load remove text button clicked
         private void removeFromLoadButton_Click(object sender, EventArgs e)
         {
             Form getFile = new Form2(); //call form 2
@@ -209,6 +245,7 @@ namespace Clean_Text
             }
         }
 
+        //when load replacement text button clicked
         private void replaceFromLoadButton_Click(object sender, EventArgs e)
         {
             Form getFile = new Form2(); //call form 2
@@ -222,10 +259,11 @@ namespace Clean_Text
             }
         }
 
+        //open settings page
         private void settingsButton_Click(object sender, EventArgs e)
         {
             Form settings = new Form3(); //create a new settings form
-            settings.ShowDialog(); //show form 3 and pause until it is closed
+            settings.ShowDialog(); //show settings form and pause until it is closed
         }
 
         //replace text button is checked/unchecked
@@ -249,19 +287,6 @@ namespace Clean_Text
         private void resetButton_Click(object sender, EventArgs e)
         {
             ResetForm();
-        }
-
-        //entry text box is changed
-        private void entryTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (loading) return; //break if loading
-            if (entryTextBox.Text == null || entryTextBox.Text == "") validEntry = false; //if empty, mark as invalid
-            else validEntry = true; //otherwise valid
-
-            if (entryTextBox.Text.Length >= 36000) forceLogInput = true;
-            else forceLogInput = false;
-
-            CheckValid(); //check for readiness to run
         }
     }
 }
