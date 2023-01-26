@@ -78,14 +78,14 @@ namespace Clean_Text
         {
             try
             {
-                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                if (!Program.CreateDir(dir, "Log(s) failed to generate.")) break;
 
                 if (separate)
                 {
                     int index = 0;
                     for (int a = 0; a < nameList.Count; a++)
                     {
-                        File.WriteAllLines(dir + @nameList[index], contents[index]);
+                        Program.WriteFile(dir + @nameList[index], contents[index]);
                         generatedFiles = " " + generatedFiles + dir + @nameList[index];
                         index++;
                     }
@@ -101,7 +101,7 @@ namespace Clean_Text
                         }
                         lines.Add("\n\n\n");
                     }
-                    File.WriteAllLines(dir + @name, lines.ToArray());
+                    Program.WriteFile(dir + @name, lines.ToArray());
                     generatedFiles = generatedFiles + dir + @name;
                 }
             }

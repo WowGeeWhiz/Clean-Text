@@ -38,15 +38,15 @@ namespace Clean_Text
                     if (!File.Exists(prefDir))
                     {
                         MessageBox.Show("No config file found, generating file...");
-                        File.WriteAllLines(prefDir, DoubleArrayToSingle(prefs));
+                        WriteFile(prefDir, DoubleArrayToSingle(prefs));
                     }
 
-                    string[] loadedConfigs = File.ReadAllLines(prefDir);
+                    string[] loadedConfigs = ReadFile(prefDir);
                     if (loadedConfigs.Length != prefs.GetLength(0))
                     {
                         MessageBox.Show("Config file missing keys, restoring default settings...");
                         loadedConfigs = DoubleArrayToSingle(prefs);
-                        File.WriteAllLines(prefDir, loadedConfigs);
+                        WriteFile(prefDir, loadedConfigs);
                     }
 
                     for (int a = 0; a < loadedConfigs.Length; a++)
@@ -73,7 +73,7 @@ namespace Clean_Text
                         currentConfig[i, 1] = values[i];
                     }
 
-                    File.WriteAllLines(prefDir, temp);
+                    WriteFile(prefDir, temp);
                 }
                 catch (Exception ex)
                 {
@@ -98,8 +98,60 @@ namespace Clean_Text
                 }
                 return temp.ToArray();
             }
+        }
 
-            static public bool AccessibleDirectory(string dir)
+        public static bool CreateDir(string dir, string extraMessage)
+        {         
+            try
+            {
+                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show(extraMessage + "\n" + dir + " is innacessible. Cannot create/use directory.");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(extraMessage + "\nError: " + ex.Message);
+                return false;
+            }
+            finally
+            {
+                return true;
+            }
+        }
+
+        public void WriteFile(string dir, string[] lines)
+        {
+            try
+            {
+                File.WriteAllLines(dir, lines);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error writing file: " + ex.message);
+            }
+        }
+
+        public string[] ReadFile(string dir)
+        {
+            string[] temp = new string[0];
+            try
+            {
+                temp = File.ReadAllLines(dir);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to read file: " + ex.message);
+            }
+            finally
+            {
+                return temp;
+            }
+        }
+        
+        static public bool AccessibleDirectory(string dir)
             {
                 bool temp = true;
                 try
@@ -123,7 +175,6 @@ namespace Clean_Text
                 }
                 return temp;
             }
-        }
 
         public static string tempString = ""; //static temp reference string
 
