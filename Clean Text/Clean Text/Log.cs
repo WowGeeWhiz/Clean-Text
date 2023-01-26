@@ -110,9 +110,6 @@ namespace Clean_Text
                 MessageBox.Show("Error: " + ex.Message);
                 return;
             }
-
-            MessageBox.Show("Logs generated at " + dir);
-
         }
 
         private string[] CopyToAddArray(string[] input, string[] newArray)
