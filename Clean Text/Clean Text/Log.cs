@@ -36,7 +36,6 @@ namespace Clean_Text
             cleaned = Preferences.StringToBool(Preferences.currentConfig[4, 1]);
             events = Preferences.StringToBool(Preferences.currentConfig[5, 1]);
             separate = Preferences.StringToBool(Preferences.currentConfig[6, 1]);
-            asTxt = Preferences.StringToBool(Preferences.currentConfig[7, 1]);
 
             if (forceO) original = true;
             if (forceRm) removed = true;
@@ -46,7 +45,7 @@ namespace Clean_Text
             emptyReplace = notReplace;
 
             nameList = new List<string>();
-            name = "\\" + Preferences.currentConfig[8, 1];
+            name = "\\" + Preferences.currentConfig[7, 1];
             string time = DateTime.Now.ToString("-MM.dd.yy-hh.mm.ss");
 
             if (!separate)
@@ -57,8 +56,7 @@ namespace Clean_Text
                 if (cleaned) name += "C";
                 if (events) name += "E";
                 name += time;
-                if (asTxt) name += ".txt";
-                else name += ".log";
+                name += ".txt";
             }
             else
             {
@@ -71,8 +69,7 @@ namespace Clean_Text
 
                 for (int a = 0; a < nameList.Count; a++)
                 {
-                    if (asTxt) nameList[a] = nameList[a] + ".txt";
-                    else nameList[a] = nameList[a] + ".log";
+                    nameList[a] = nameList[a] + ".txt";
                 }
             }
         }

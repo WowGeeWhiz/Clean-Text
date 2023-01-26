@@ -4,22 +4,23 @@ namespace Clean_Text
     {
         public static class Preferences
         {
-            public static string prefDir = @Application.StartupPath + "config.ini";//.StartupPath;
+            public static string prefsVersion = "1.2.2";
+            public static string prefDir = @Application.StartupPath + "config.ini";
             public static string currentUser = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             public static string[,] prefs = new string[,]
             {
-                {"outputDirectory=", ""},
-                {"outputOriginal=","0"},
-                {"outputRemoved=","0"},
-                {"outputReplace=","0"},
-                {"outputCleaned=","1"},
-                {"generateLog=","0"},
-                {"outputSeparate=","0"},
-                {"outputTxt=","1"},
-                {"logName=","CleanedText-"}
+                {"outputDirectory=", ""}, //[0]
+                {"outputOriginal=","0"}, //[1]
+                {"outputRemoved=","0"}, //[2]
+                {"outputReplace=","0"}, //[3]
+                {"outputCleaned=","1"}, //[4]
+                {"generateLog=","0"}, //[5]
+                {"outputSeparate=","0"}, //[6]
+                {"logName=","CleanedText-"}, //[7] - different value was here but has been deprecated
+                {"prefsVersion=",prefsVersion} //[8]
             };
             public static string[,] currentConfig = prefs;
-            static char[] invalidDirChars = new char[] { '/', '\\', ':', ':', '"', '<', '>' };
+            static char[] invalidDirChars = new char[] { '/', '\\', ':', ':', '"', '<', '>', '=' };
 
             public static bool CheckVaildNameChars(string name)
             {

@@ -34,7 +34,6 @@
             this.logPrefixTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.browseForOutputDirButton = new System.Windows.Forms.Button();
-            this.outputAsTxtCheckBox = new System.Windows.Forms.CheckBox();
             this.generateEventLogCheckBox = new System.Windows.Forms.CheckBox();
             this.outputSeparateCheckBox = new System.Windows.Forms.CheckBox();
             this.outputCleanedCheckBox = new System.Windows.Forms.CheckBox();
@@ -67,7 +66,6 @@
             this.outputLogGroup.Controls.Add(this.logPrefixTextBox);
             this.outputLogGroup.Controls.Add(this.label2);
             this.outputLogGroup.Controls.Add(this.browseForOutputDirButton);
-            this.outputLogGroup.Controls.Add(this.outputAsTxtCheckBox);
             this.outputLogGroup.Controls.Add(this.generateEventLogCheckBox);
             this.outputLogGroup.Controls.Add(this.outputSeparateCheckBox);
             this.outputLogGroup.Controls.Add(this.outputCleanedCheckBox);
@@ -109,17 +107,6 @@
             this.browseForOutputDirButton.Text = "Browse";
             this.browseForOutputDirButton.UseVisualStyleBackColor = true;
             this.browseForOutputDirButton.Click += new System.EventHandler(this.browseForOutputDirButton_Click);
-            // 
-            // outputAsTxtCheckBox
-            // 
-            this.outputAsTxtCheckBox.AutoSize = true;
-            this.outputAsTxtCheckBox.Location = new System.Drawing.Point(225, 131);
-            this.outputAsTxtCheckBox.Name = "outputAsTxtCheckBox";
-            this.outputAsTxtCheckBox.Size = new System.Drawing.Size(113, 19);
-            this.outputAsTxtCheckBox.TabIndex = 9;
-            this.outputAsTxtCheckBox.Text = "Output all as .txt";
-            this.outputAsTxtCheckBox.UseVisualStyleBackColor = true;
-            this.outputAsTxtCheckBox.CheckedChanged += new System.EventHandler(this.outputAsTxtCheckBox_CheckedChanged);
             // 
             // generateEventLogCheckBox
             // 
@@ -305,7 +292,6 @@
         private Button applyButton;
         private Button revertButton;
         private Button closeButton;
-        private CheckBox outputAsTxtCheckBox;
         private FolderBrowserDialog folderBrowserDialog1;
         private Button browseForOutputDirButton;
         private Label label2;

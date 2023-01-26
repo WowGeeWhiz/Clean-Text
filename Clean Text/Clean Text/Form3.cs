@@ -52,7 +52,7 @@ namespace Clean_Text
             outputDirectoryTextBox.Text = "";
             outputDirectoryTextBox.PlaceholderText = settings[0, 1];
             logPrefixTextBox.Text = "";
-            logPrefixTextBox.PlaceholderText = settings[8, 1];
+            logPrefixTextBox.PlaceholderText = settings[7, 1];
             validLogPrefix = true;
             outputOriginalCheckBox.Checked = Preferences.StringToBool(settings[1, 1]);
             outputRemovedCheckBox.Checked = Preferences.StringToBool(settings[2, 1]);
@@ -60,7 +60,6 @@ namespace Clean_Text
             outputCleanedCheckBox.Checked = Preferences.StringToBool(settings[4, 1]);
             generateEventLogCheckBox.Checked = Preferences.StringToBool(settings[5, 1]);
             outputSeparateCheckBox.Checked = Preferences.StringToBool(settings[6, 1]);
-            outputAsTxtCheckBox.Checked = Preferences.StringToBool(settings[7, 1]);
 
             for (int i = 0; i < settings.GetLength(0); i++)
             {
@@ -130,13 +129,6 @@ namespace Clean_Text
             else tempArray[6] = "0";
         }
 
-        private void outputAsTxtCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (isLoading) return;
-            if (outputAsTxtCheckBox.Checked) tempArray[7] = "1";
-            else tempArray[7] = "1";
-        }
-
         private void browseForOutputDirButton_Click(object sender, EventArgs e)
         {
             string tempDir = "";
@@ -197,7 +189,7 @@ namespace Clean_Text
             if (logPrefixTextBox.Text == "" || logPrefixTextBox.Text == null || (logPrefixTextBox.Text != " " && Preferences.CheckVaildNameChars(logPrefixTextBox.Text))) validLogPrefix = true;
             else validLogPrefix = false;
 
-            if (validLogPrefix) tempArray[8] = logPrefixTextBox.Text;
+            if (validLogPrefix) tempArray[7] = logPrefixTextBox.Text;
         }
     }
 }
