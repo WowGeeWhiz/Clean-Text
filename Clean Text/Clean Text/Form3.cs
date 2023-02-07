@@ -15,40 +15,67 @@ namespace Clean_Text
 {
     public partial class Form3 : Form
     {
-
+        //bools for reference
         bool isLoading = false, validLogPrefix;
+
+        //array of loaded settings
         string[] tempArray = new string[Preferences.prefs.GetLength(0)];
 
+        //public constructor for settings page
         public Form3()
         {
             InitializeComponent();
             ReloadSavedValues();
         }
 
+        //set the enabled states of boxes based on selected values
         private void SetEnabledStates()
         {
-            if (outputOriginalCheckBox.Checked && !(outputRemovedCheckBox.Checked || outputReplaceCheckBox.Checked || outputCleanedCheckBox.Checked)) outputOriginalCheckBox.Enabled = false;
+            if (outputOriginalCheckBox.Checked 
+                && !(outputRemovedCheckBox.Checked 
+                || outputReplaceCheckBox.Checked 
+                || outputCleanedCheckBox.Checked)) 
+                    outputOriginalCheckBox.Enabled = false;
             else outputOriginalCheckBox.Enabled = true;
-            if (outputRemovedCheckBox.Checked && !(outputOriginalCheckBox.Checked || outputReplaceCheckBox.Checked || outputCleanedCheckBox.Checked)) outputRemovedCheckBox.Enabled = false;
+            if (outputRemovedCheckBox.Checked 
+                && !(outputOriginalCheckBox.Checked 
+                || outputReplaceCheckBox.Checked 
+                || outputCleanedCheckBox.Checked)) 
+                    outputRemovedCheckBox.Enabled = false;
             else outputRemovedCheckBox.Enabled = true;
-            if (outputReplaceCheckBox.Checked && !(outputRemovedCheckBox.Checked || outputOriginalCheckBox.Checked || outputCleanedCheckBox.Checked)) outputReplaceCheckBox.Enabled = false;
+            if (outputReplaceCheckBox.Checked 
+                && !(outputRemovedCheckBox.Checked 
+                || outputOriginalCheckBox.Checked 
+                || outputCleanedCheckBox.Checked)) 
+                    outputReplaceCheckBox.Enabled = false;
             else outputReplaceCheckBox.Enabled = true;
-            if (outputCleanedCheckBox.Checked && !(outputRemovedCheckBox.Checked || outputReplaceCheckBox.Checked || outputOriginalCheckBox.Checked)) outputCleanedCheckBox.Enabled = false;
+            if (outputCleanedCheckBox.Checked 
+                && !(outputRemovedCheckBox.Checked 
+                || outputReplaceCheckBox.Checked 
+                || outputOriginalCheckBox.Checked)) 
+                    outputCleanedCheckBox.Enabled = false;
             else outputCleanedCheckBox.Enabled = true;
         }
 
+        //reload the actual preferences
         private void ReloadSavedValues(bool revertToDefault = false)
         {
+            //set program to loading state
             this.Cursor = Cursors.WaitCursor;
             isLoading = true;
 
+            //load the preferences
             Preferences.LoadPrefs();
 
+            //initialize the settings array
             string[,] settings;
 
+            //set the settings to default if option chosen
             if (!revertToDefault) settings = Preferences.currentConfig;
+            //otherwise set the settings to the loaded values
             else settings = Preferences.prefs;
 
+            //reset the settings fields to their loaded or default values (based on choice)
             outputDirectoryTextBox.Text = "";
             outputDirectoryTextBox.PlaceholderText = settings[0, 1];
             logPrefixTextBox.Text = "";
@@ -61,33 +88,43 @@ namespace Clean_Text
             generateEventLogCheckBox.Checked = Preferences.StringToBool(settings[5, 1]);
             outputSeparateCheckBox.Checked = Preferences.StringToBool(settings[6, 1]);
 
+            //apply the current settings to the temp array of values
             for (int i = 0; i < settings.GetLength(0); i++)
             {
                 tempArray[i] = settings[i, 1];
             }
 
-
+            //reset the states of the buttons
             SetEnabledStates();
 
+            //stop loading process
             isLoading = false;
             this.Cursor = Cursors.Default;
         }
 
+        //close button for this form (not application)
         private void closeButton_Click(object sender, EventArgs e)
         {
             Close();
         }
 
+        //reload the currently saved values (undo changes)
         private void revertButton_Click(object sender, EventArgs e)
         {
             ReloadSavedValues();
         }
 
+        //checkbox for loging input
         private void outputOriginalCheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            //if loading, break
             if (isLoading) return;
+
+            //assign value
             if (outputOriginalCheckBox.Checked) tempArray[1] = "1";
             else tempArray[1] = "0";
+
+            //update enabled states
             SetEnabledStates();
         }
 
