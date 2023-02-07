@@ -4,8 +4,11 @@ namespace Clean_Text
     {
         //booleans for use throughout program
         bool loading, validEntry, validRemove, validReplace, forceLogInput, forceLogOutput, forceLogReplace, forceLogRemove;
+
+        //force a log if a field has or will have this many characters
         int forceLogCharLimit = 36000;
 
+        //constructor
         public Form1()
         {
             InitializeComponent();
@@ -40,9 +43,9 @@ namespace Clean_Text
         //check for valid inputs
         private void CheckValid()
         {
-            if (validEntry && validRemove) //if valid entry and remove
+            if (validEntry && validRemove) //if valid entry text is given and remove text is also valid
             {
-                if (replaceTextButton.Checked && !validReplace) runButton.Enabled = false; //if replacing and not valid replace disable run button
+                if (replaceTextButton.Checked && !validReplace) runButton.Enabled = false; //if replacing the keys and not valid replacement value disable run button
                 else runButton.Enabled = true; //otherwise enable run button
             }
             else runButton.Enabled = false; //disable run button
@@ -60,42 +63,42 @@ namespace Clean_Text
             else generateLogCheck.Enabled = true; //if not forcing log, enable generate log box
         }
 
-        //text in remove text box changed
+        //text in remove box changed
         private void removeTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (loading) return; //if loading break
-            if (removeTextBox.Text == null || removeTextBox.Text == "") validRemove = false; //if empty, mark as invalid
+            if (loading) return; //if loading, break
+            if (removeTextBox.Text == null || removeTextBox.Text == "") validRemove = false; //if empty, mark as invalid removal key
             else validRemove = true; //otherwise valid
 
-            //force log of removal text
+            //force log of removal text if over char limit
             if (removeTextBox.Text.Length >= forceLogCharLimit) forceLogRemove = true;
             else forceLogRemove = false;
 
             CheckValid(); //check for readiness to run
         }
 
-        //text in replace text box changed
+        //text in replace box changed
         private void replaceTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (loading) return; //if loading break
-            if (replaceTextBox.Text == null || replaceTextBox.Text == "") validReplace = false; //if empty, mark as invalid
+            if (loading) return; //if loading, break
+            if (replaceTextBox.Text == null || replaceTextBox.Text == "") validReplace = false; //if empty, mark as invalid replacement value
             else validReplace = true; //otherwise valid
 
-            //force log of replacement text
+            //force log of replacement text if over char limit
             if (replaceTextBox.Text.Length >= forceLogCharLimit) forceLogReplace = true;
             else forceLogReplace = false;
 
             CheckValid(); //check for readiness to run
         }
 
-        //entry text box is changed
+        //text in entry box is changed
         private void entryTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (loading) return; //break if loading
-            if (entryTextBox.Text == null || entryTextBox.Text == "") validEntry = false; //if empty, mark as invalid
+            if (loading) return; //if loading, break
+            if (entryTextBox.Text == null || entryTextBox.Text == "") validEntry = false; //if empty, mark as invalid entry
             else validEntry = true; //otherwise valid
 
-            //force log entry if too long
+            //force log entry if over char limit
             if (entryTextBox.Text.Length >= forceLogCharLimit) forceLogInput = true;
             else forceLogInput = false;
 
@@ -105,6 +108,7 @@ namespace Clean_Text
         //display help when button is clicked
         private void helpButton_Click(object sender, EventArgs e)
         {
+            /*
             MessageBox.Show("This tool can be used to easily remove duplicate strings from the input text.\n" +
                 "1 - Enter the original text in the first box.\n" +
                 "2 - Enter the text you want removed (Note: The tool will look for complete compies of this text," +
@@ -113,6 +117,8 @@ namespace Clean_Text
                 " to replace with.\n" +
                 "4 - Press Run.\n\n" +
                 "Find me on GitHub: https://github.com/wowgeewhiz");
+                //this needs to be updated, see Issues
+                */
         }
 
         //when run button is clicked
@@ -131,13 +137,22 @@ namespace Clean_Text
             //check for generating log
             bool log = generateLogCheck.Checked;
 
-            //new log instance
+            //new log instance (only used if log = true)
             Log generatedLog = new Log();
 
             //set log values to match forced values
-            generatedLog.ResetBoolsAndName(forceLogInput, forceLogRemove, forceLogReplace, forceLogOutput, (forceLogInput && forceLogOutput && forceLogRemove && forceLogReplace));
+            generatedLog.ResetBoolsAndName(
+                forceLogInput,
+                forceLogRemove, 
+                forceLogReplace, 
+                forceLogOutput, 
+                (forceLogInput 
+                    && forceLogOutput 
+                    && forceLogRemove 
+                    && forceLogReplace)
+                );
 
-            //if generating a log, add input, removal, and replacement texts (if logging)
+            //if generating a log, add input, removal, and replacement texts (if logging these values)
             if (log)
             {
                 if (generatedLog.original) generatedLog.AddOriginal(new string[] { input });
@@ -181,7 +196,7 @@ namespace Clean_Text
                     tempOutput += input; //add the remaining input to output
                     break; //break repeat loop
                 }
-                input = input.Substring(temp + remove.Length); //shorten input
+                input = input.Substring(temp + remove.Length); //shorten to unparsed input
             }
 
             //finish event log
@@ -190,7 +205,8 @@ namespace Clean_Text
             events.Add("Keys replaced: " + numKeysReplaced);
             events.Add("\nProcess ended at " + DateTime.Now.ToString("MM.dd.yy-hh.mm.ss"));
 
-            //if generating log, add cleaned text and event log if using them
+            //if generating log, add cleaned text and event log (if logging these values)
+            //then generate the log
             if (log)
             {
                 if (generatedLog.cleaned) generatedLog.AddCleaned(new string[] { tempOutput });
@@ -198,6 +214,7 @@ namespace Clean_Text
 
                 //generate the actual log files
                 generatedLog.GenerateLog();
+                //display output
                 MessageBox.Show("Text cleaned and saved to generated file(s) at " + generatedLog.dir + "\n" +
                 "Files Generated: " + generatedLog.generatedFiles);
             }
@@ -211,15 +228,18 @@ namespace Clean_Text
             ResetForm(); //reset the form
         }
 
-        //close the form
+        //close button
         private void closeButton_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
-        //when load input text button clicked
+        //when "load input text" button clicked
         private void inputFromLoadButton_Click(object sender, EventArgs e)
         {
+            //This needs to be updated, replace with file load dialogue here and remove form 2. 
+            //See issue 12
+
             Form getFile = new Form2(); //call form 2
             getFile.ShowDialog(); //show form 2 and pause until it is closed
 
@@ -231,9 +251,12 @@ namespace Clean_Text
             }
         }
 
-        //when load remove text button clicked
+        //when "load remove text" button clicked
         private void removeFromLoadButton_Click(object sender, EventArgs e)
         {
+            //This needs to be updated, replace with file load dialogue here and remove form 2. 
+            //See issue 12
+            
             Form getFile = new Form2(); //call form 2
             getFile.ShowDialog(); //show form 2 and pause until it is closed
 
@@ -245,9 +268,12 @@ namespace Clean_Text
             }
         }
 
-        //when load replacement text button clicked
+        //when "load replacement text" button clicked
         private void replaceFromLoadButton_Click(object sender, EventArgs e)
         {
+            //This needs to be updated, replace with file load dialogue here and remove form 2. 
+            //See issue 12
+            
             Form getFile = new Form2(); //call form 2
             getFile.ShowDialog(); //show form 2 and pause until it is closed
 
@@ -263,22 +289,25 @@ namespace Clean_Text
         private void settingsButton_Click(object sender, EventArgs e)
         {
             Form settings = new Form3(); //create a new settings form
-            settings.ShowDialog(); //show settings form and pause until it is closed
+            settings.ShowDialog(); //show settings form and pause this form until settings is closed
         }
 
         //replace text button is checked/unchecked
         private void replaceTextButton_CheckedChanged(object sender, EventArgs e)
         {
             if (loading) return; //if loading, break
+
+            //if the box is now checked
             if (replaceTextButton.Checked)
             {
-                replaceTextBox.Enabled = true; //enable text box if checked
+                replaceTextBox.Enabled = true; //enable text box
                 replaceFromLoadButton.Enabled = true; //enable button to load replace value from a text file
             }
+            //if the box is now unchecked
             else
             {
-                replaceTextBox.Enabled = false; //disable text box if not checked
-                replaceFromLoadButton.Enabled = false; //disable button to load if not checked
+                replaceTextBox.Enabled = false; //disable text box 
+                replaceFromLoadButton.Enabled = false; //disable button to load
             }
             CheckValid(); //check for readiness to run
         }
