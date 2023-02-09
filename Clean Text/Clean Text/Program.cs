@@ -1,6 +1,6 @@
 namespace Clean_Text
 {
-    public  static class Program
+    public static class Program
     {
         public static class Preferences
         {
@@ -8,7 +8,7 @@ namespace Clean_Text
             public static string prefsVersion = "1.2.2";
             public static string prefDir = @Application.StartupPath + "config.ini";
             public static string currentUser = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-            
+
             //default preferences
             public static string[,] prefs = new string[,]
             {
@@ -68,7 +68,7 @@ namespace Clean_Text
                         //restore default settings, set them as the loaded values
                         MessageBox.Show("Config file missing keys, restoring default settings...");
                         loadedConfigs = DoubleArrayToSingle(prefs);
-                        
+
                         //write the defaults to disk
                         WriteFile(prefDir, loadedConfigs);
                     }
@@ -78,7 +78,7 @@ namespace Clean_Text
                     {
                         //split loaded pref on the '='
                         string[] tempArray = loadedConfigs[a].Split('=');
-                        
+
                         //set config to actual loaded value
                         currentConfig[a, 1] = tempArray[1];
                     }
@@ -101,7 +101,7 @@ namespace Clean_Text
                 try
                 {
                     //foreach line in the input
-                    for(int i = 0; i < values.Length; i++)
+                    for (int i = 0; i < values.Length; i++)
                     {
                         //add the identifier to the string and set to temp value
                         temp[i] = currentConfig[i, 0] + values[i];
@@ -150,7 +150,7 @@ namespace Clean_Text
 
         //create a directory on the disk
         public static bool CreateDir(string dir, string extraMessage)
-        {         
+        {
             //try-catch for exception handling
             try
             {
@@ -172,15 +172,12 @@ namespace Clean_Text
                 return false;
             }
             //if no exceptions were triggered
-            finally
-            {
-                //return true
-                return true;
-            }
+            //return true
+            return true;
         }
 
         //write a file
-        public void WriteFile(string dir, string[] lines)
+        public static void WriteFile(string dir, string[] lines)
         {
             //try-catch for exception handling
             try
@@ -192,12 +189,12 @@ namespace Clean_Text
             catch (Exception ex)
             {
                 //display message
-                MessageBox.Show("Error writing file: " + ex.message);
+                MessageBox.Show("Error writing file: " + ex.Message);
             }
         }
 
         //read a file
-        public string[] ReadFile(string dir)
+        public static string[] ReadFile(string dir)
         {
             //temp array for values
             string[] temp = new string[0];
@@ -212,51 +209,47 @@ namespace Clean_Text
             catch (Exception ex)
             {
                 //display message
-                MessageBox.Show("Failed to read file: " + ex.message);
+                MessageBox.Show("Failed to read file: " + ex.Message);
+            }
+            return temp;
+        }
+
+        //check if dir is accessible
+        static public bool AccessibleDirectory(string dir)
+        {
+            //return value starts as true
+            bool temp = true;
+
+            //try-catch for exception handling
+            try
+            {
+                //if directory does not exist, create directory
+                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+
+                //write a test file to check for access
+                File.WriteAllLines(dir + "\\test.txt", new string[] { "test file" });
+            }
+            //catch program cannot access dir
+            catch (UnauthorizedAccessException)
+            {
+                //display message, mark as invalid
+                MessageBox.Show("The program cannot access that directory.\nTry running the program as an administrator, or changing the security of the directory");
+                temp = false;
+            }
+            //generic exception
+            catch (Exception ex)
+            {
+                //dispaly message, mark as invalid
+                MessageBox.Show("Error: " + ex.Message);
+                temp = false;
             }
             finally
             {
-                //return temp (will be length 0 if nothing read in)
-                return temp;
+                //delete temp file, return validit
+                if (File.Exists(dir + "\\test.txt")) File.Delete(dir + "\\test.txt");
             }
+            return temp;
         }
-        
-        //check if dir is accessible
-        static public bool AccessibleDirectory(string dir)
-            {
-                //return value starts as true
-                bool temp = true;
-
-                //try-catch for exception handling
-                try
-                {
-                    //if directory does not exist, create directory
-                    if (!Directory.Exists(dir)) Directory.CreateDirctory(dir);
-                    
-                    //write a test file to check for access
-                    File.WriteAllLines(dir + "\\test.txt", new string[] { "test file" });
-                }
-                //catch program cannot access dir
-                catch (UnauthorizedAccessException)
-                {
-                    //display message, mark as invalid
-                    MessageBox.Show("The program cannot access that directory.\nTry running the program as an administrator, or changing the security of the directory");
-                    temp = false;
-                }
-                //generic exception
-                catch (Exception ex)
-                {
-                    //dispaly message, mark as invalid
-                    MessageBox.Show("Error: " + ex.Message);
-                    temp = false;
-                }
-                finally
-                {
-                    //delete temp file, return validit
-                    if (File.Exists(dir + "\\test.txt")) File.Delete(dir + "\\test.txt");
-                    return temp;
-                }
-            }
 
         //temp ref string to pass values between forms
         public static string tempString = ""; //static temp reference string

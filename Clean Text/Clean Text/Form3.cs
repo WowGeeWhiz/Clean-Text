@@ -64,7 +64,7 @@ namespace Clean_Text
                 || outputReplaceCheckBox.Checked
                 || outputOriginalCheckBox.Checked
                 || outputCleanedCheckBox.Checked))
-                    generateEventLogCheckBox.enabled = false;
+                    generateEventLogCheckBox.Enabled = false;
         }
 
         //reload the actual preferences
@@ -226,7 +226,7 @@ namespace Clean_Text
 
             //Check for progrem access to directory
             //if program has access, set the new directory to the value of the textbox
-            if (Preferences.AccessibleDirectory(tempDir)) outputDirectoryTextBox.Text = tempDir;
+            if (AccessibleDirectory(tempDir)) outputDirectoryTextBox.Text = tempDir;
             //message appears during call to Preferences.AccessibleDirectory if the directory is inaccessible
         }
 
@@ -246,7 +246,7 @@ namespace Clean_Text
             }
 
             //if directory is inaccessbile
-            if (!Preferences.AccessibleDirectory(tempArray[0]))
+            if (!AccessibleDirectory(tempArray[0]))
             {
                 //break method
                 //warning appears as part of Preferences.AccessibleDirectory

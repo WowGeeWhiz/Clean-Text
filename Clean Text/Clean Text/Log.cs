@@ -58,7 +58,7 @@ namespace Clean_Text
             removed = Preferences.StringToBool(Preferences.currentConfig[2, 1]) || forceRm;
             replaced = Preferences.StringToBool(Preferences.currentConfig[3, 1]) || forceRp;
             cleaned = Preferences.StringToBool(Preferences.currentConfig[4, 1]) || forceC;
-            events = Preferences.StringToBool(Preferences.currentConfig[5, 1]) forceC;
+            events = Preferences.StringToBool(Preferences.currentConfig[5, 1]);
             separate = Preferences.StringToBool(Preferences.currentConfig[6, 1]);
 
             //check for empty replace value
@@ -107,7 +107,7 @@ namespace Clean_Text
             try
             {
                 //Check for if the program can actually generate to the defined directory
-                if (!Program.CreateDir(dir, "Log(s) failed to generate.")) break;
+                if (!Program.CreateDir(dir, "Log(s) failed to generate.")) return;
 
                 //if generating separate logs
                 if (separate)
